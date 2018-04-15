@@ -1,6 +1,7 @@
 clear all
 a = arduino('btspp://98D33190154F','Nano3');
 disp('Arduino kapcsolat létrejött')
+rotations=20;
 clk='D6';
 dir='D7';
 halfStep='D8';
@@ -17,10 +18,10 @@ cam=webcam('USB2.0_Camera');
 disp('Kamera csatlakoztatva')
 
 grayImage=zeros(480,640);
-kepek=zeros(400,480,640);
+kepek=zeros(rotations,480,640);
 figure;
 f=waitbar(0,'Képek készítése');
-for idx=1:400
+for idx=1:rotations
     % Acquire a single image.
    rgbImage = snapshot(cam);
 
@@ -36,7 +37,7 @@ for idx=1:400
     writeDigitalPin(a, clk, 0);
     pause(0.06);
     writeDigitalPin(a, clk, 1);
-    waitbar(idx/400,f,'Képek készítése');
+    waitbar(idx/rotations,f,'Képek készítése');
     pause(0.06);
 end
 close(f)
