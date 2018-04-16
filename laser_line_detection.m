@@ -14,12 +14,12 @@
 
 % making images with and without line laser
 writeDigitalPin(laserDino,laserPin,1);
-disp('laserOn')
+%disp('laserOn')
 pause(1);
 laserOn = snapshot(cam);
 writeDigitalPin(laserDino,laserPin,0);
 pause(1);
-disp('laserOff')
+%disp('laserOff')
 laserOff = snapshot(cam);
 
 
@@ -66,4 +66,4 @@ laserMask1 = detectLaserLineOnImg(filtered_gray1);
 laserMask2 = detectLaserLineOnImg(filtered_gray2);
 
 imshowpair(laserMask1,laserMask2,'montage');
-title('LaserMask    compare with     Prewitt Filter');
+title('LaserMask1    compare with    LaserMask2');

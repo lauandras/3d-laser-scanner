@@ -24,6 +24,7 @@ pause(2);
 laserPin = 'D2';
 laserDino = arduino('COM6','Nano3');
 disp('Laser connected')
+writeDigitalPin(laserDino,laserPin,0);
 %------------------------------------------ 
 % connect to the usb webcamera
 %------------------------------------------
