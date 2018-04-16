@@ -1,6 +1,6 @@
-function [BW,maskedRGBImage] = createMaskHSV(RGB)
+function maskedRGBImage = createMaskHSVInDark(RGB)
 %createMask  Threshold RGB image using auto-generated code from colorThresholder app.
-%  [BW,MASKEDRGBIMAGE] = createMask(RGB) thresholds image RGB using
+%  MASKEDRGBIMAGE = createMask(RGB) thresholds image RGB using
 %  auto-generated code from the colorThresholder app. The colorspace and
 %  range for each channel of the colorspace were set within the app. The
 %  segmentation mask is returned in BW, and a composite of the mask and
@@ -14,15 +14,15 @@ function [BW,maskedRGBImage] = createMaskHSV(RGB)
 I = rgb2hsv(RGB);
 
 % Define thresholds for channel 1 based on histogram settings
-channel1Min = 0.831;
-channel1Max = 0.109;
+channel1Min = 0.899;
+channel1Max = 0.232;
 
 % Define thresholds for channel 2 based on histogram settings
 channel2Min = 0.000;
-channel2Max = 1.000;
+channel2Max = 0.677;
 
 % Define thresholds for channel 3 based on histogram settings
-channel3Min = 0.503;
+channel3Min = 0.513;
 channel3Max = 1.000;
 
 % Create mask based on chosen histogram thresholds
