@@ -12,10 +12,6 @@
 %cam.Saturation=0;
 %preview(cam);
 
-%connect to arduino with laser
-laserPin = 'D2';
-%laserDino = arduino('COM6','Nano3');
-
 % making images with and without line laser
 writeDigitalPin(laserDino,laserPin,1);
 disp('laserOn')
