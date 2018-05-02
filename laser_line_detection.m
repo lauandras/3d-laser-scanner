@@ -17,9 +17,10 @@ writeDigitalPin(laserDino,laserPin,1);
 %disp('laserOn')
 pause(1);
 laserOn = snapshot(cam);
-writeDigitalPin(laserDino,laserPin,0);
 pause(1);
+writeDigitalPin(laserDino,laserPin,0);
 %disp('laserOff')
+pause(1);
 laserOff = snapshot(cam);
 
 
