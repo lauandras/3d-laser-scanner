@@ -1,5 +1,5 @@
 function [rect,NullNull,nullnull]=imageCrop
-img=imread('Image21.png');
+img=imread('calibration_images\Image21.png');
 [croppedimage, rect] = imcrop(img);
 nullnull(1)=cameraParams.ReprojectedPoints(1,1,21)-rect(1);
 nullnull(2)=cameraParams.ReprojectedPoints(1,2,21)-rect(2);
