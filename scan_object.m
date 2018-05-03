@@ -10,6 +10,7 @@ for idx=1:rotations
     
     laser_line_detection;
     rotateTable(a,clk,10);
+    %createPolarPointSet;
     waitbar(idx/rotations,f,'Making images');
 end
 close(f)
