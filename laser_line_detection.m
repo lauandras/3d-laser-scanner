@@ -23,6 +23,9 @@ writeDigitalPin(laserDino,laserPin,0);
 pause(1);
 laserOff = snapshot(cam);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   TODO : call imageCrop with parameters
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %imshowpair(laserOn,laserOff,'montage');
 %pause(2);
