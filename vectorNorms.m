@@ -1,5 +1,5 @@
-function [horizontalVectorNorm,verticalVectorNorm]=vectorNorms
-imageNumber=23;
+function [horizontalVectorNorm,verticalVectorNorm]=vectorNorms(cameraParams)
+imageNumber=26;
 squareSize=14.55; %mm
 
 %Irányvektorok
@@ -8,8 +8,8 @@ verticalVector=[0 0];
 
 for i=0:5
     horizontalVector(1)=horizontalVector(1)+...
-        cameraParams.ReprojectedPoints(1+i,1,imageNumber)-...
-        cameraParams.ReprojectedPoints(49+i,1,imageNumber);
+               cameraParams.ReprojectedPoints(1+i,1,imageNumber)-...
+               cameraParams.ReprojectedPoints(49+i,1,imageNumber);
     horizontalVector(2)=horizontalVector(2)+...
         cameraParams.ReprojectedPoints(49+i,2,imageNumber)-...
         cameraParams.ReprojectedPoints(1+i,2,imageNumber);
