@@ -1,3 +1,4 @@
+function laserMask=laser_line_detection(rect,laserDino,laserPin,cam)
 %brighness 130 - def
 %contrast 45 - def
 %gamma 82
@@ -12,39 +13,34 @@
 %cam.Saturation=0;
 %preview(cam);
 
-% making images with and without line laser
+%--------------------------------------------------------
+%   Képkészítés lézerfénnyel és anélkül
+%--------------------------------------------------------
 writeDigitalPin(laserDino,laserPin,1);
-%disp('laserOn')
 pause(1);
 laserOn = snapshot(cam);
 pause(1);
 writeDigitalPin(laserDino,laserPin,0);
-%disp('laserOff')
 pause(1);
 laserOff = snapshot(cam);
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%   TODO : call imageCrop with parameters
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%--------------------------------------------------------
+%   Képek vágása
+%--------------------------------------------------------
+laserOnCropped=imcrop(laserOn,rect);
+laserOffCropped=imcrop(laserOff,rect);
 
-%imshowpair(laserOn,laserOff,'montage');
-%pause(2);
-maskLon = createMaskHSVInDark(laserOn);
-maskLoff = createMaskHSVInDark(laserOff);
-gmlon = rgb2gray(maskLon);
-gmloff = rgb2gray(maskLoff);
-
-grayOn = rgb2gray(laserOn);
-grayOff = rgb2gray(laserOff);
-
-imshowpair(grayOn,grayOff,'montage');
-pause(2);
-
-imshowpair(gmlon,gmloff,'montage');
-pause(2);
-
-filtered_gray1 = imgaussfilt(gmlon-gmloff,1.1);
-filtered_gray2 = imgaussfilt(grayOn-grayOff,0.8);
+%--------------------------------------------------------
+%   HSV transzformáció, rgb2gray és szûrés
+%--------------------------------------------------------
+% maskLon = createMaskHSVInDark(laserOnCropped);
+% maskLoff = createMaskHSVInDark(laserOffCropped);
+% gmlon = rgb2gray(maskLon);
+% gmloff = rgb2gray(maskLoff);
+%filtered_gray1 = imgaussfilt(gmlon-gmloff,1.1);
+grayOn=rgb2gray(laserOnCropped);
+grayOff=rgb2gray(laserOffCropped);
+filtered_gray = imgaussfilt(grayOn-grayOff,0.8);
 
 %-----------------------------------------------------
 % testing sigma values - conclusion 0.8-1.0 are better
@@ -56,18 +52,13 @@ filtered_gray2 = imgaussfilt(grayOn-grayOff,0.8);
 %     pause(2);
 % end
 
-imshowpair(filtered_gray1,filtered_gray2,'montage');
-%pause(2);
-
-
 % BW1 = edge(filtered_gray,'Sobel','vertical');
 %BW2 = edge(filtered_gray,'Prewitt','vertical'); %this is the best in darkness
 % 
 % imshowpair(BW1,BW2,'montage');
 % title('Sobel Filter    compare with graypreimg    Prewitt Filter');
 
-laserMask1 = detectLaserLineOnImg(filtered_gray1);
-laserMask2 = detectLaserLineOnImg(filtered_gray2);
+laserMask = detectLaserLineOnImg(filtered_gray);
 
-imshowpair(laserMask1,laserMask2,'montage');
-title('LaserMask1    compare with    LaserMask2');
+imshowpair(laserOnCropped,laserMask,'montage');
+title('Cropped image    compare with    LaserMask');
