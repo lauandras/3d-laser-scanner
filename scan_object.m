@@ -20,6 +20,9 @@ end
 if ((exist('a')&&exist('laserDino')&&exist('cam'))~=1)
     prompt = 'Melyik porthoz van csatlakoztatva a lézer vezérlõje: ';
     laserCom = input(prompt,'s');
+    clear a
+    clear cam
+    clear laserDino
     [a,laserDino,cam]=init(laserCom);
 end
 
@@ -56,13 +59,11 @@ clk='D6';
 %   Szkennelés
 %--------------------------------------------------------
 figure;
-f=waitbar(0,'1','Name','Making images',...
-    'CreateCancelBtn','setappdata(gcbf,''canceling'',1)');
-setappdata(f,'canceling',0);
+f=waitbar(0,'Inicializálás','Name','Making images');
 for idr=1:rotations
     laserMask=laser_line_detection(rect,laserDino,laserPin,cam);
     kepek(idr,:,:)=laserMask;
-    rotateTable(a,clk,1);
+    rotateTable(a,clk,400/rotations);
     tfLaserMask=imtransform(laserMask,tform);
     polarPointSet_mm=createPolarPointSet(tfLaserMask,polarPointSet_mm,idr,xdata,ydata);
     waitbar(idr/rotations,f,sprintf('%d/%d',idr,rotations));
