@@ -1,8 +1,5 @@
 function [a,laserDino,cam]=init(laserCom)
 % function to initialize variables
-clear a
-clear cam
-clear laserDino
 
 %------------------------------------------
 % connection to the table rotating arduino
