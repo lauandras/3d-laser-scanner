@@ -1,6 +1,5 @@
 
 % run this scritp to make images
-rotations=400;
 %----------------------------------------------------
 %   Kamera kalibrációja
 %----------------------------------------------------
@@ -32,7 +31,7 @@ end
 %   Kép érdemi részének kijelölése
 %--------------------------------------------------------
 disp('Tegye a tárgyat a forgóasztalra, ha megvan kattintson a figurre!')
-f = figure;
+figure;
 waitforbuttonpress;
 disp('Jelölje ki a képen a tárgyat, majd jobb egérgomb és "Crop Image"!')
 img=snapshot(cam);
@@ -46,6 +45,7 @@ img=snapshot(cam);
 %--------------------------------------------------------
 %   Szúkséges változók deklarációja
 %--------------------------------------------------------
+rotations=400;
 imgSize = size(img);
 imgHeight = imgSize(1);
 imgWidth  = imgSize(2);
