@@ -1,10 +1,11 @@
+
 % run this scritp to make images
 rotations=400;
 %----------------------------------------------------
 %   Kamera kalibrációja
 %----------------------------------------------------
 laserPin = 'D2';
-if (exist('cameraParams')~=1)
+if (exist('cameraParams','var')~=1)
     clear cam
     disp('Készítsen 15 képet 4 másodperces közidõvel, majd még 3-at úgy, hogy a sakktábla minta a lézerrel párhuzamos!')
     cameraCalibrator
@@ -15,9 +16,10 @@ if (exist('cameraParams')~=1)
 end
 
 %----------------------------------------------------
-%   Inicializálás, ha nincs kamera, lézer és forgóasztal
+%   Inicializálás, ha nincs kamera VAGY lézer VAGY forgóasztal
 %----------------------------------------------------
-if ((exist('a')&&exist('laserDino')&&exist('cam'))~=1)
+%exist() 1-et ad vissza, ha a változó létezik a workspace-en, 0-át, ha nem
+if ((exist('a','var')&&exist('laserDino','var')&&exist('cam','var'))~=1)
     prompt = 'Melyik porthoz van csatlakoztatva a lézer vezérlõje: ';
     laserCom = input(prompt,'s');
     clear a
