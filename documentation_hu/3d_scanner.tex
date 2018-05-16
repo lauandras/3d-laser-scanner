@@ -41,9 +41,36 @@ Gépészmérnöki kar}\\[1cm]
 \cfoot{\thepage. oldal}
 %=================================================
 \section{Feladat leírása}
+
+
 %=================================================
-\section{Alapul vett szakirodalom}
-Ide jönne a két nagyon hasonló projekt meghivatkozva!
+\section{Alapul vett szakirodalom} % -  tard
+%=================================================
+	%"3d laserscanner" kulcsszót beírva a Google-be rengeteg találatot kap az ember. Mi elsőnek a képi és videó találatokat %nézegettük meg, és rögtön megállapítottuk, hogy nagyon menő lesz az általunk készített kis kütyü / szerkezet.\\
+	
+	Alapvetően kétféle lézer szkenner található meg a piacon. Az egyik, ami az adott tárgyat, objektumot végigpásztázza egy lézerfény segítségével és a lézerfény kibocsájtásától, a lézerfény visszaérkezéséig eltelt időből számítja a távolságot. Ez egy elég drága technika, mivel nagyon pontosan kell mérni az időt, mivel a fény terjedési sebessége nagyon nagy, ezért körülbelül $[ns]$ nagyságrendben kell mérni az idő múlását.
+	\\
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[height=5cm]{images/Faro_Building_Scan}
+			\includegraphics[height=5cm]{images/Bridge_Scan}
+		\end{center}
+		\caption{Távolságmérésen alapuló lézerszkenner\cite{FaroBuildingScan}\cite{BridgeScan}}
+	\end{figure}
+
+	A másik, ami egy vonallézerrel világítja meg a tárgy felületét, majd képfeldolgozással felismerve a megvilágított élt, különböző módszerek alapján, előállít egy pontfelhőt. A pontfelhőből háromszögeléses technikával pedig elkészít egy felületmodellt.
+	\\
+	
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[height=5cm]{images/Mobile_Scan}
+			\includegraphics[height=5cm]{images/PC_Scan}
+		\end{center}
+		\caption{Forgóasztalos, képfeldolgozáson alapuló\cite{MobileScan}\cite{PCScan}}
+	\end{figure}
+
+	A rendelkezésre álló eszközök, a feladatleírás és a költségek alapján a második módszert választottuk. A projekt kiindulása képpen nagy segítségünkre volt az \href{http://www.instructables.com/id/3D-Laser-Scanning-DIY/}{\textit{Instructables}} oldalon található \textit{DIY: How to Make a Low Cost 3D Scanner}\cite{LaserScannerProjekt} nevű projekt. Ez adott alapot a gondolkodásmódunknak, de végül teljesen más módszerrel dolgozzuk fel az adatokat.
+
 %=================================================
 \section{Felhasznált hardverek}
 \subsection{Beszerzett eszközök}
@@ -74,6 +101,25 @@ Feladatkiírás\\
 \texttt{http://mogi.bme.hu/letoltes/MECHATRONIKAI\%20\&\%20IR\%C3\%81NY\%C3\%8DT\%C3\%81\\
 STECHNIKAI\%20T\%C3\%81RGYAK/MECHATRONIKA\_PROJEKT\_BMEGEFOAMM3/Feladatlapok\_M/}\\
 2018.05.16.
+
+
+%=================================================
+\bibitem{FaroBuildingScan} 
+\href{http://lanmarservices.com/wp-content/uploads/2014/04/Faro_Building_Scan.jpg}{Távolságmérésen alapuló lézerszkenner 1}
+%=================================================
+\bibitem{BridgeScan}
+\href{https://i1.wp.com/cmfenews.com/wp-content/uploads/2018/04/3D-Laser.jpg?fit=1600%2C1200&ssl=1}{Távolságmérésen alapuló lézerszkenner 2}
+%=================================================
+\bibitem{MobileScan} 
+\href{https://i.ytimg.com/vi/RVgyyIlQydg/maxresdefault.jpg}{Forgóasztalos, képfeldolgozáson alapuló 1}
+%=================================================
+\bibitem{PCScan}
+\href{https://3dprint.com/wp-content/uploads/2015/03/Fig.-1-New-Perceptron-Smart3D-Laser-Scanning-System-3.jpg}{Forgóasztalos, képfeldolgozáson alapuló 2}
+%=================================================
+\bibitem{LaserScannerProjekt}
+\href{http://www.instructables.com/id/3D-Laser-Scanning-DIY/}{DIY: How to Make a Low Cost 3D Scanner}
+%=================================================
+
 \end{thebibliography}
 
 \end{document}
