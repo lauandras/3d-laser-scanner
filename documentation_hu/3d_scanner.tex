@@ -42,12 +42,35 @@ Gépészmérnöki kar}\\[1cm]
 %=================================================
 \section{Feladat leírása}
 %=================================================
-\section{Alapul vett szakirodalom}
-Ide jönne a két nagyon hasonló projekt meghivatkozva!
+\section{Alapul vett szakirodalom} % -tard
+
+	"3d laserscanner" kulcsszót beírva a Google-be rengeteg találatot kap az ember. Mi elsőnek a képi és videó találatokat nézegettük meg, és rögtön megállapítottuk, hogy nagyon menő lesz az általunk készített kis kütyü / szerkezet.\\
+	
+	Alapvetően kétféle laser szkenner található meg a piacon. Az egyik, ami az adott tárgyra, objektumot végigpásztázza egy lézerfény segítségével és a lézerfény kibocsájtásától, a lézerfény visszaérkezéséig eltelt időből számítja a távolságot. Mondanom sem kell, hogy ez egy elég drága technika, mivel nagyon pontosan kell mérni az időt, mivel a fény terjedési sebessége nagyon nagy, ezért körülbelül $[ns]$ nagyságrendben kell mérni az idő múlását.
+	\\
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[height=6cm]{images/Faro_Building_Scan.jpg}
+		\end{center}
+		\caption{Távolságmérésen alapuló lézerszkenner\cite{FaroBuildingScan}}
+	\end{figure}
+
+	\begin{figure}[h!]
+		\begin{center}
+			\includegraphics[height=7cm]{images/Bridge_Scan.jpg}
+		\end{center}
+		\caption{Távolságmérésen alapuló lézerszkenner\cite{BridgeScan}}
+	\end{figure}	
+
+	A másik, ami egy vonallézerrel világítja meg a tárgy felületét, majd képfeldolgozással felismerve a megvilágított élt, különböző módszerek alapján, előállít egy pontfelhőt. A pontfelhőből háromszögeléses technikával pedig elkészít egy felületmodellt.\\
+	
+	Ebben a témában több hasonló szerkezetű projekt is található.
+
+	Ide jönne a két nagyon hasonló projekt meghivatkozva!
 
 
 
-Roland help a hivatkozassal :D
+	Roland help a hivatkozassal :D
 %=================================================
 \section{Felhasznált hardverek}
 \subsection{Beszerzett eszközök}
@@ -78,6 +101,15 @@ Feladatkiírás\\
 \texttt{http://mogi.bme.hu/letoltes/MECHATRONIKAI\%20\&\%20IR\%C3\%81NY\%C3\%8DT\%C3\%81\\
 STECHNIKAI\%20T\%C3\%81RGYAK/MECHATRONIKA\_PROJEKT\_BMEGEFOAMM3/Feladatlapok\_M/}\\
 2018.05.16.
+
+
+%=================================================
+\bibitem{FaroBuildingScan} 
+\href{http://lanmarservices.com/wp-content/uploads/2014/04/Faro_Building_Scan.jpg}{Távolságmérésen alapuló lézerszkenner 1}
+%=================================================
+\bibitem{BridgeScan}
+\href{https://i1.wp.com/cmfenews.com/wp-content/uploads/2018/04/3D-Laser.jpg?fit=1600%2C1200&ssl=1}{Távolságmérésen alapuló lézerszkenner 2}
+
 \end{thebibliography}
 
 \end{document}
