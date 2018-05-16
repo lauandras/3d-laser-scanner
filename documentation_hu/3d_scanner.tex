@@ -66,12 +66,11 @@ A projekt célja egy használható 3D lézerszkenner eljárás kidolgozása és 
 \subsection{Alap koncepció}
 A szkennelési módszert egy webkamera, egy vonallézer és egy forgóasztal felhasználásával dolgoztuk ki. Az eljárás lényege, hogy a tárgyra vetült lézerfény vonalról a kamerával valamekkora szögből kép készül. A képen a forgóasztal forgástengelyének meghatározhatónak kell lennie, és ez a vonallézer által meghatározott síkba kell hogy essen. A lézerpontok forgástengelytől (és azon egy tetszőleges origótól) vett távolságából a térbeli helyzetük meghatározható.
 %=================================================
-\section{Alapul vett szakirodalom} % -  tard
+\section{Alapul vett szakirodalom} % tard
 %=================================================
 	%"3d laserscanner" kulcsszót beírva a Google-be rengeteg találatot kap az ember. Mi elsőnek a képi és videó találatokat %nézegettük meg, és rögtön megállapítottuk, hogy nagyon menő lesz az általunk készített kis kütyü / szerkezet.\\
 	
-	Alapvetően kétféle lézer szkenner található meg a piacon. Az egyik, ami az adott tárgyat, objektumot végigpásztázza egy lézerfény segítségével és a lézerfény kibocsájtásától, a lézerfény visszaérkezéséig eltelt időből számítja a távolságot. Ez egy elég drága technika, mivel nagyon pontosan kell mérni az időt, mivel a fény terjedési sebessége nagyon nagy, ezért körülbelül $[ns]$ nagyságrendben kell mérni az idő múlását.
-	\\
+	Alapvetően kétféle lézer szkenner található meg a piacon. Az egyik, ami az adott tárgyat, objektumot végigpásztázza egy lézerfény segítségével és a lézerfény kibocsájtásától, a lézerfény visszaérkezéséig eltelt időből számítja a távolságot. Ez egy elég drága technika, mivel nagyon pontosan kell mérni az időt, mivel a fény terjedési sebessége nagyon nagy, ezért körülbelül $[ns]$ nagyságrendben kell mérni az idő múlását.\\[10pt]
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[height=5cm]{images/Faro_Building_Scan}
@@ -79,22 +78,19 @@ A szkennelési módszert egy webkamera, egy vonallézer és egy forgóasztal fel
 		\end{center}
 		\caption{Távolságmérésen alapuló lézerszkenner\cite{FaroBuildingScan}\cite{BridgeScan}}
 	\end{figure}
-
-	A másik, ami egy vonallézerrel világítja meg a tárgy felületét, majd képfeldolgozással felismerve a megvilágított élt, különböző módszerek alapján, előállít egy pontfelhőt. A pontfelhőből háromszögeléses technikával pedig elkészít egy felületmodellt.
-	\\
-	
+	A másik, ami egy vonallézerrel világítja meg a tárgy felületét, majd képfeldolgozással felismerve a megvilágított élt, különböző módszerek alapján, előállít egy pontfelhőt. A pontfelhőből háromszögeléses technikával pedig elkészít egy felületmodellt.\\[10pt]
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[height=5cm]{images/Mobile_Scan}
 			\includegraphics[height=5cm]{images/PC_Scan}
 		\end{center}
 		\caption{Forgóasztalos, képfeldolgozáson alapuló\cite{MobileScan}\cite{PCScan}}
-	\end{figure}
-
+	\end{figure}\\[10pt]
 	A rendelkezésre álló eszközök, a feladatleírás és a költségek alapján a második módszert választottuk. A projekt kiindulása képpen nagy segítségünkre volt az \href{http://www.instructables.com/id/3D-Laser-Scanning-DIY/}{\textit{Instructables}} oldalon található \textit{DIY: How to Make a Low Cost 3D Scanner}\cite{LaserScannerProjekt} nevű projekt. Ez adott alapot a gondolkodásmódunknak, de végül teljesen más módszerrel dolgozzuk fel az adatokat.
 
 %=================================================
-\section{Felhasznált hardverek}
+\section{Felhasznált hardverek} % bognarm
+%=================================================
 \subsection{Beszerzett eszközök}
 A projektfeladat már az előző évben is ki volt adva, a tavalyi csoportnak ugyan nem sikerült befejeznie, de néhány általuk készített alkatrész öröklődött. Így már kézhez kaptuk egy  LFL650-5-12(9x20)60-as típusú vonallézert,
 egy unipoláris léptető motort, a tanszéki KUTESZ alkatrészekből összeállított állvánnyal és egy kisebb méretű asztallal,
@@ -102,13 +98,16 @@ illetve a motor meghajtó áramkört is.
 \\[10pt]
 A felhasznált hardverek egy másik része Bojtos Attila tanár úrtól származik. Ilyen a fényképezőgép állvány, az erre később rögzített 20x20-as ITEM-5-ös profil, és egy Canyon márkájú, 640x480-as felbontású webkamera.
 \\[10pt]
-Általunk beszerzett alkatrész még a forgóasztalt vezérlő áramkör: ...
-És a lézert kapcsoló egység: ...
+Általunk beszerzett alkatrészek még a következőek: 
+\begin{itemize}
+	\item 2 db Arduino Nano v3
+	\item HC-06 Bluetooh-Serial modul
+\end{itemize}
  \begin{figure}[h!]
  	\centering
  	\includegraphics[scale=0.5]{images/laser}
- 	\includegraphics[scale=0.5]{images/laser}
-	\includegraphics[scale=0.5]{images/laser}
+ 	\includegraphics[scale=0.5]{images/Arduino_Nano}
+	\includegraphics[scale=0.5]{images/HC06}
 	\caption{Beszerzett eszközök}
 \end{figure}
 
@@ -122,14 +121,23 @@ Végül a profilt a kamera állványra rögzítő elem egy 6mm vastag,  lemez al
 	\includegraphics[height=5cm]{images/kameratarto}
 	\includegraphics[height=5cm]{images/asztal}
 	\caption{Saját készítésű eszközök}
+\end{figure}\\[10pt]
+Készítettünk továbbá még két áramkört, amivel képesek vagyunk Bluetooth-on keresztül vezérelni a forgóasztalt, illetve egy vonallézer vezérlőt, amivel ki-be tudjuk kapcsolgatni a lézert szoftveresen. 
+
+ \begin{figure}[h!]
+	\centering
+	\includegraphics[height=7cm]{images/Laser_Dino}
+	\includegraphics[height=7cm]{images/Turntable}
+	\caption{Saját készítésű eszközök}
 \end{figure}
+
 \subsection{Hardverek közötti csatlakozás}
 
 Az elkészült konstrukció két részből áll. Az egyik a forgóasztal, a motor, a meghajtója és ennek vezérlő áramköre. A meghajtónak hálózati tápellátás szükséges, míg a vezérlő jelenleg számítógépről kapja az áramot USB-n keresztül.
 \\[10pt]
-A másik rész a kamera állvány, rajta a lézerrel és webkamerával. Utóbbi közvetlen csatlakozik a számítógéphez, míg a lézer az őt vezérlő arduino-n keresztül, szintén USB segítségével.\ref{kameraallvanyra}
+A másik rész a kamera állvány, rajta a lézerrel és webkamerával. Utóbbi közvetlen csatlakozik a számítógéphez, míg a lézer az őt vezérlő arduino-n keresztül, szintén USB segítségével. [\ref{kameraallvanyra}]
 \\[10pt]
-Így a szkenner két részben hordozható kivitelű.\ref{hordozhatosag}
+Így a szkenner két részben hordozható kivitelű. [\ref{hordozhatosag}]
  \begin{figure}[h!]
 	\centering
 	\includegraphics[width=5.5cm]{images/forgoasztal}
@@ -156,19 +164,16 @@ Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, ami
 %=================================================
 \newpage
 \begin{thebibliography}{9} 
+	
+%=================================================
 \bibitem{feladatkiiras} 
 Feladatkiírás
 \href{http://mogi.bme.hu/letoltes/MECHATRONIKAI%20&%20IR%C3%81NY%C3%8DT%C3%81STECHNIKAI%20T%C3%81RGYAK/MECHATRONIKA_PROJEKT_BMEGEFOAMM3/Feladatlapok_M/}
 {[link]}
-
+%=================================================
 \bibitem{alkalmazasok} 
 3D szkennelés gyakorlati alkalmazása
 \href{https://www.artec3d.com/applications}{[link]}
-\texttt{http://mogi.bme.hu/letoltes/MECHATRONIKAI\%20\&\%20IR\%C3\%81NY\%C3\%8DT\%C3\%81\\
-STECHNIKAI\%20T\%C3\%81RGYAK/MECHATRONIKA\_PROJEKT\_BMEGEFOAMM3/Feladatlapok\_M/}\\
-2018.05.16.
-
-
 %=================================================
 \bibitem{FaroBuildingScan} 
 \href{http://lanmarservices.com/wp-content/uploads/2014/04/Faro_Building_Scan.jpg}{Távolságmérésen alapuló lézerszkenner 1}
@@ -184,6 +189,12 @@ STECHNIKAI\%20T\%C3\%81RGYAK/MECHATRONIKA\_PROJEKT\_BMEGEFOAMM3/Feladatlapok\_M/
 %=================================================
 \bibitem{LaserScannerProjekt}
 \href{http://www.instructables.com/id/3D-Laser-Scanning-DIY/}{DIY: How to Make a Low Cost 3D Scanner}
+%=================================================
+\bibitem{ArduinoNano}
+\href{https://potentiallabs.com/cart/image/cache/catalog/New%20Components/Nano_1-800x800.jpg}{Arduino Nano}
+%=================================================
+\bibitem{HC06}
+\href{http://www.robotistan.com/hc06-serial-port-bluetooth-module-12526-82-B.jpg}{HC06 Modul}
 %=================================================
 
 \end{thebibliography}
