@@ -1,0 +1,77 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{pdfpages}
+\usepackage[magyar]{babel}
+\usepackage{hyperref}	
+\hypersetup{					
+colorlinks=false,						
+pdfborder={0 0 0},
+}
+\usepackage{fancyhdr}
+\usepackage[left=2cm,right=2cm,top=3.5cm,bottom=3cm,headsep=50pt]{geometry}
+
+\begin{document}
+%=================================================
+\thispagestyle{empty}
+\begin{center}
+\includegraphics[scale=0.3]{bme.pdf}\\
+\large{Budapesti Műszaki- és Gazdaságtudományi Egyetem\\
+Gépészmérnöki kar}\\[1cm]
+\begin{Huge}
+\textbf{Mechatronika projekt}
+\end{Huge}\\[0.5cm]
+
+\Large{BMEGEFOAMM3}\\[2cm]
+\Huge{\bf{3D szkenner}}\\[2.5cm]
+\bf{\huge{Tar Dániel\\Bognár Máté\\Varga Roland}} \\[1cm]
+
+\includegraphics[scale=0.5]{mogilogo.jpg}\\[1cm]
+\large{\today}
+\end{center}
+%=================================================
+\newpage
+\tableofcontents
+\newpage
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Tar Dániel\\Bognár Máté\\Varga Roland}
+\lhead{3D szkenner}
+\cfoot{\thepage. oldal}
+%=================================================
+\section{Feladat leírása}
+%=================================================
+\section{Alapul vett szakirodalom}
+Ide jönne a két nagyon hasonló projekt meghivatkozva!
+%=================================================
+\section{Felhasznált hardverek}
+\subsection{Beszerzett eszközök}
+\subsection{Saját készítésű eszközök}
+\subsection{Hardverek közötti csatlakozás}
+%=================================================
+\section{Programkód}
+Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát.
+\subsection{Kamera kalibráció}
+\subsection{Perifériák inicializálása}
+\subsection{Képek vágása}
+\subsection{Transzformáció meghatározása}
+\subsection{Szükséges változók deklarálása}
+\subsection{Szkennelés folyamata}
+\subsubsection{Lézerfény detektálása}
+\subsubsection{A forgóasztal léptetése}
+\subsubsection{Képek transzformációja}
+\subsubsection{Pontfelhő generálása}
+%=================================================
+\section{Eredmények, a módszer korlátai}
+%=================================================
+\section{Továbbfejlesztési irányok}
+%=================================================
+\newpage
+\begin{thebibliography}{9} 
+\bibitem{feladatkiiras} 
+Feladatkiírás\\
+\texttt{http://mogi.bme.hu/letoltes/MECHATRONIKAI\%20\&\%20IR\%C3\%81NY\%C3\%8DT\%C3\%81\\
+STECHNIKAI\%20T\%C3\%81RGYAK/MECHATRONIKA\_PROJEKT\_BMEGEFOAMM3/Feladatlapok\_M/}\\
+2018.05.16.
+\end{thebibliography}
+
+\end{document}
