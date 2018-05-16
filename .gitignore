@@ -1,0 +1,10 @@
+
+*.aux
+
+documentation_hu/3d_scanner\.log
+
+*.out
+
+documentation_hu/3d_scanner\.synctex\.gz
+
+*.toc
