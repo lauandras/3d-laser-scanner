@@ -47,8 +47,46 @@ Ide jönne a két nagyon hasonló projekt meghivatkozva!
 %=================================================
 \section{Felhasznált hardverek}
 \subsection{Beszerzett eszközök}
+A projektfeladat már az előző évben is ki volt adva, a tavalyi csoportnak ugyan nem sikerült befejeznie, de néhány általuk készített alkatrész öröklődött. Így már kézhez kaptuk egy  LFL650-5-12(9x20)60-as típusú vonallézert,
+egy unipoláris léptető motort, a tanszéki KUTESZ alkatrészekből összeállított állvánnyal és egy kisebb méretű asztallal,
+illetve a motor meghajtó áramkört is.
+\\[10pt]
+A felhasznált hardverek egy másik része Bojtos Attila tanár úrtól származik. Ilyen a fényképezőgép állvány, az erre később rögzített 20x20-as ITEM-5-ös profil, és egy Canyon márkájú, 640x480-as felbontású webkamera.
+\\[10pt]
+Általunk beszerzett alkatrész még a forgóasztalt vezérlő áramkör: ...
+És a lézert kapcsoló egység: ...
+ \begin{figure}[h!]
+ 	\centering
+ 	\includegraphics[scale=0.5]{images/laser}
+ 	\includegraphics[scale=0.5]{images/laser}
+	\includegraphics[scale=0.5]{images/laser}
+	\caption{Beszerzett eszközök}
+\end{figure}
+
 \subsection{Saját készítésű eszközök}
+Az általunk tervezett alkatrészek többsége 3D nyomtatással készült, ezek a kamerát és lézert az ITEM profilra rögzítő elemek. A lézer lefogó, amely a lézert rögzíti a profil közepén. És a kamera tartó, ami két alkatrész közé szorítja be a kamera alsó részét, a gyári foglalathoz hasonló módon.\\[10pt]
+Emellett a követelményeknek megfelelő szkennelhető tárgyméret miatt tervezni kellett egy új forgóasztalt. Ez az asztal 180mm átmérőjű, központosító körökkel ellátott, a KUTESZ elemekkel kompatibilis furatkiosztású elem.
+Végül a profilt a kamera állványra rögzítő elem egy 6mm vastag,  lemez alkatrész.
+ \begin{figure}[h!]
+ 	\centering
+	\includegraphics[height=5cm]{images/lezerlefogo}
+	\includegraphics[height=5cm]{images/kameratarto}
+	\includegraphics[height=5cm]{images/asztal}
+	\caption{Saját készítésű eszközök}
+\end{figure}
 \subsection{Hardverek közötti csatlakozás}
+
+Az elkészült konstrukció két részből áll. Az egyik a forgóasztal, a motor, a meghajtója és ennek vezérlő áramköre. A meghajtónak hálózati tápellátás szükséges, míg a vezérlő jelenleg számítógépről kapja az áramot USB-n keresztül.
+\\[10pt]
+A másik rész a kamera állvány, rajta a lézerrel és webkamerával. Utóbbi közvetlen csatlakozik a számítógéphez, míg a lézer az őt vezérlő arduino-n keresztül, szintén USB segítségével.\ref{kameraallvanyra}
+\\[10pt]
+Így a szkenner két részben hordozható kivitelű.\ref{hordozhatosag}
+ \begin{figure}[h!]
+	\centering
+	\includegraphics[width=5.5cm]{images/forgoasztal}
+	\includegraphics[width=5.5cm]{images/allvany}
+	\caption{Saját készítésű eszközök}
+\end{figure}
 %=================================================
 \section{Programkód}
 Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát.
