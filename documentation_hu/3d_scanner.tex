@@ -153,6 +153,27 @@ Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, ami
 \section{Eredmények, a módszer korlátai}
 %=================================================
 \section{Továbbfejlesztési irányok}
+\subsection{Működésbeli}
+Ami az eredeti tervhez képest az idő és eszköz hiány miatt nem valósult meg, egy második kamera beszerzése. Ezt a kamerát a lézer másik oldalára rögzítve, a két kamerát egyszerre működtetve a kitakarásokat lehetne csökkenteni, így bonyolultabb geometriájú tárgyak is szkennelhetőek lennének.
+\\[10pt]
+A szkennelést leginkább lassító tényező a kamera alkalmazkodási ideje a fényerőhöz, a lézeres és lézer nélküli képek között. A megoldás a tárgy kétszeri körbeforgatása lenne, egyszer lézerrel, majd anélkül. A képeket csak ezután dolgozná fel a program. Így az alkalmazkodási időt nem képenként, hanem csak egyszer kellene kivárni, a szkennelés idejét drasztikusan csökkentve.
+\subsection{Hardveres}
+A hardveres fejlesztések fő célja a szkenner kompaktabbá tétele, működtetésének egyszerűsítése, szállíthatóságának könnyítése.
+\\[10pt]
+Elsőként a motor meghajtó áramkör újra tervezése és a vezérlő áramkörrel való egybeépítése lenne célszerű. Ezt egyetlen tápcsatlakozóval ellátni, így a forgóasztalnak nem lenne szüksége összeköttetésre a számítógéppel.
+Ezután egy ház tervezése és gyártása volna jó, a motor állványa helyett. Ebben rögzíthető lenne a motor mellett az elektronika, egyetlen tápkábel kivezetéssel. Továbbá a ház csúszásgátló talpakkal való felszerelésével a kalibráció utáni esetleges véletlenszerű elmozdítások veszélye csökkenne.
+\\[10pt]
+Egy következő fejlesztés lehetne a kalibráció könnyítése érdekében, a kalibráló mátrix merev lemezre nyomtatása. Ez a lemez, megfelelő méretekkel megalkotva, csapokkal a forgóasztal furataiba illeszkedne úgy, hogy a mátrix pontosan az asztal közepén helyezkedne el, így javítva a kalibrációt.
+\\[10pt]
+Egyéb fejlesztési lehetőség a lézert működtető, jelenleg rögzítetlen áramkör forrasztása, elhelyezése az állványra.
+\\[10pt]
+A szkennelést tovább javítaná a mostani piros lézer lecserélése. Egy zöld lézer nem csak nagyobb intenzitású, de színének előfordulása ritkább a környezetben, ezért a tárgyra vetülő képe egyszerűbben érzékelhető a kamera által.
+\subsection{Programbeli}
+A program elsődleges fejlesztési iránya a kamera kép szűrésének optimalizálása. A lézer vonalának minél tisztább detektálása végett. Jelenleg a szkenner világos környezetben nem, vagy csak alig képes a pontok vissza adására.
+\\[10pt]
+További fejlesztési irány egy könnyen kezelhető felhasználói felület készítése a programhoz, annak érdekében, hogy ne csak a program működésének ismerői legyenek képesek a használatára.
+\\[10pt]
+A jelenlegi program kimenete egy pontfelhő. Továbblépésként megvalósítható a ponthalmaz CAD szoftverbe importálása közvetlen, vagy közvetve, felületek illesztésével.
 %=================================================
 \newpage
 \begin{thebibliography}{9} 
