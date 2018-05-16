@@ -32,12 +32,10 @@ end
 %   Transzformációs pontok felvétele
 %--------------------------------------------------------
 tfPointsImage=snapshot(cam);
-tfPoints=zeros([4 2]);
 for index=1:4
-    %imshow(tfPointsImage);
-    tfPoints(index,:)=getline_zoom(tfPointsImage);
+    [X,Y]=getline_zoom(tfPointsImage);
 end
-tfPoints=[X Y];
+
 
 %--------------------------------------------------------
 %   Kép érdemi részének kijelölése
@@ -52,7 +50,7 @@ img=snapshot(cam);
 %--------------------------------------------------------
 %   Transzformáció meghatározása
 %--------------------------------------------------------
-[tfHeight,tfWidth,tform,xdata,ydata]=imageTform(imgCropped,rect,paralellImageNumber,tfPoints);
+[tfHeight,tfWidth,tform,xdata,ydata]=imageTform(imgCropped,rect,paralellImageNumber,cameraParams);
 
 %--------------------------------------------------------
 %   Szúkséges változók deklarációja
