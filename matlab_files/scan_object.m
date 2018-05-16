@@ -4,6 +4,11 @@
 %   Kamera kalibrációja
 %----------------------------------------------------
 laserPin = 'D2';
+prompt = 'Melyik porthoz van csatlakoztatva a lézer vezérlõje: ';
+laserCom = input(prompt,'s');
+laserDino = arduino(laserCom,'Nano3');
+disp('Laser connected')
+writeDigitalPin(laserDino,laserPin,1);
 if (exist('cameraParams','var')~=1)
     clear cam
     disp('Készítsen 15 képet 4 másodperces közidõvel, majd még 3-at úgy, hogy a sakktábla minta a lézerrel párhuzamos!')
@@ -19,8 +24,6 @@ end
 %----------------------------------------------------
 %exist() 1-et ad vissza, ha a változó létezik a workspace-en, 0-át, ha nem
 if ((exist('a','var')&&exist('laserDino','var')&&exist('cam','var'))~=1)
-    prompt = 'Melyik porthoz van csatlakoztatva a lézer vezérlõje: ';
-    laserCom = input(prompt,'s');
     clear a
     clear cam
     clear laserDino
