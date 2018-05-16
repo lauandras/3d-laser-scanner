@@ -5,7 +5,7 @@ v1=cameraParams.ReprojectedPoints(6,:,paralellImageNumber)-[rect(1) rect(2)];
 v3=cameraParams.ReprojectedPoints(49,:,paralellImageNumber)-[rect(1) rect(2)];
 v2=cameraParams.ReprojectedPoints(54,:,paralellImageNumber)-[rect(1) rect(2)];
 
-worldCoordinates=14.55*[-4 6; -4 1; 4 6; 4 1];
+worldCoordinates=14.55*[-4 -6; -4 -1; 4 -6; 4 -1];
 
 tform = maketform('projective',[v4; v1; v3; v2],worldCoordinates);
 [newImage,xdata,ydata]=imtransform(imgCropped,tform);
