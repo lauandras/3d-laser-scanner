@@ -10,6 +10,38 @@ pdfborder={0 0 0},
 \usepackage{fancyhdr}
 \usepackage[left=2cm,right=2cm,top=3.5cm,bottom=3cm,headsep=50pt]{geometry}
 
+%=================================================
+% code snippset settings
+%=================================================
+\usepackage{listings}
+\usepackage{color}
+
+\usepackage[framed,numbered]{matlab-prettifier}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\lstset{language=Matlab,%
+	%basicstyle=\color{red},
+	breaklines=true,%
+	morekeywords={matlab2tikz},
+	keywordstyle=\color{blue},%
+	morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+	identifierstyle=\color{black},%
+	stringstyle=\color{mylilas},
+	commentstyle=\color{mygreen},%
+	showstringspaces=false,%without this there will be a symbol in the places where there is a space
+	numbers=left,%
+	numberstyle={\tiny \color{black}},% size of the numbers
+	numbersep=9pt, % this defines how far the numbers are from the text
+	emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+	%emph=[2]{word1,word2}, emphstyle=[2]{style},    
+}
+
+
 \begin{document}
 %=================================================
 \thispagestyle{empty}
@@ -146,8 +178,99 @@ A másik rész a kamera állvány, rajta a lézerrel és webkamerával. Utóbbi 
 \end{figure}
 %=================================================
 \section{Programkód}
-Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát.
+%=================================================
+	Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát. A továbbiakban ezeket fogjuk részletezni elmagyarázni.
+%=================================================
 \subsection{Kamera kalibráció}
+A kamera kalibrációt elsőnek a lézert vezérlő Arduino csatlakoztatásával kezdjük, majd bekapcsoljuk a vonallézert. Ez azért szükséges, hogy a forgóasztal forgástengelyét pontosan a lézer vonalába lehessen helyezni.\\[10pt]
+Következő lépésben ellenőrizzük, hogy nincs-e már kalibrálva. Ha igen, akkor ugrunk a következő szekcióra, ha nem akkor pedig megkezdjük a kalibrációs lépéseket:
+\begin{enumerate}
+	\item Camera Calibrator megnyílása
+	\item Képek hozzáadása
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[height=5.5cm]{images/cameraCalibrator_AddImages_LI}
+		\caption{Camera Calibrator-ban a képek hozzáadása}
+	\end{figure}
+	\item A Camera fülön a kameránk kiválasztása
+	\item Képek mentési helyének kiválasztása
+	\item A képkészítések idejének beállítása
+	\item A készítendő képek számának megadása
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[height=4cm]{images/cameraCalibrator_CameraSettings}
+		\caption{Képkészítési beállítások megadása}
+	\end{figure}
+	\item Ha mindent jól beállítottunk, a Capture gombra kattintás 
+\end{enumerate}
+A sakktáblát célszerű különböző távolságokra, különböző szögekben tartani a kamerához képest, mert akkor pontosabban tud dolgozni az algoritmus. Ajánlott legalább 10-15 kép elkészítése, mielőtt eljutnánk a kalibrációnk kritikus, legnagyobb precizitást igénylő pontjához, a forgástengely beállításához.\\[10pt]
+Most úgy kell még 3 képet készíteni, hogy a sakktábla egyik határolóvonala a forgástengellyel egybe essen, merőleges legyen a forgóasztalra és párhuzamos legyen a vonallézernyalábbal. Attól függően, hogy ezt a lépést milyen pontosan végezzük el, befolyásoljuk a beszkennelt 3d-modellünk pontosságát.\\[10pt]
+A képek elkészülése utáni felugró ablakban meg kell adni a sakktáblánk egy elemének a méreteit.\\[10pt]
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=3cm]{images/cameraCalibrator_checkboardSize}
+	\caption{Sakktábla rácsméretének a megadása}
+\end{figure}\\[10pt]
+A \textit{Calibration} fülön az \textit{Optimization Options}-re, a \textit{Calibrate}, majd az \textit{Export Camera Parameters}-re kattintva ebben a sorrendben, már csak egy lépés marad a kalibrációs folyamatból: Matlab \textit{Command Window}-jában megadni annak a képnek a számát, amelyiken a sakktáblánk párhuzamos volt a lézernyalábbal.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=8cm]{images/cameraCalibrator_exportCameraParams}
+	\caption{A kalibráció utólsó lépései}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\small
+]
+%----------------------------------------------------
+%   Camera calibration
+%----------------------------------------------------
+
+% laserPin - the pin, on which the linelaser is soldered to
+laserPin = 'D2';
+prompt = 'On which Port is the laser controlling Arduino is connected: ';
+laserCom = input(prompt,'s');
+
+% connecting to the laser controlling Arduino on Port 'laserCom'
+laserDino = arduino(laserCom,'Nano3');
+disp('Laser connected')
+
+% switch on the laser, that you can place the table so, that the laserline
+% intersect the rotation axis
+writeDigitalPin(laserDino,laserPin,1);
+
+% if 'cameraParams' variable exists, then the calibration process is already done 
+if (exist('cameraParams','var')~=1)
+% if not then clear the variables for webCam - 'cam', the camera
+% calibration toolbox will use it
+clear cam
+
+disp('Make minimum 15 pictures, then more 3 so,'+... 
++'that the chessboard pattern is parallel with the laserline!')
+
+% starting camera calibration toolbox
+cameraCalibrator
+prompt = 'What is the number of the picture, on '+...
++'what the laserline is parallel with the chessboard: ';
+paralellImageNumber = input(prompt);
+end
+\end{lstlisting}
+\caption{Kamera kalibrációs rész kódja a scan\_object.m szkriptből}
+\end{figure}
+
+		
+hellobello
+
+\begin{figure}
+	\lstinputlisting[
+	style      = Matlab-editor
+	]{../matlab_files/init.m}
+\end{figure}
+
+
 \subsection{Perifériák inicializálása}
 \subsection{Képek vágása}
 \subsection{Transzformáció meghatározása}
