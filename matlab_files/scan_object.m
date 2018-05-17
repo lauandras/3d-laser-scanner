@@ -1,23 +1,36 @@
-
+%----------------------------------------------------
 % run this scritp to make images
 %----------------------------------------------------
-%   Kamera kalibrációja
+
+%----------------------------------------------------
+%   Camera calibration
 %----------------------------------------------------
 laserPin = 'D2';
-prompt = 'Melyik porthoz van csatlakoztatva a lézer vezérlõje: ';
+prompt = 'On which Port is the laser controlling Arduino is connected: ';
 laserCom = input(prompt,'s');
+% connecting to the laser controlling Arduino on Port 'laserCom'
 laserDino = arduino(laserCom,'Nano3');
 disp('Laser connected')
+
+% switch on the laser, that you can place the table so, that the laserline
+% intersect the rotation axis
 writeDigitalPin(laserDino,laserPin,1);
+
+% if 'cameraParams' variable exists, then the calibration process is already done 
 if (exist('cameraParams','var')~=1)
+    % if not then clear the variables for webCam - 'cam', the camera
+    % calibration toolbox will use it
     clear cam
-    disp('Készítsen 15 képet 4 másodperces közidõvel, majd még 3-at úgy, hogy a sakktábla minta a lézerrel párhuzamos!')
+    
+    disp('Make minimum 15 pictures, then more 3 so,'+... 
+        +'that the chessboard pattern is parallel with the laserline!')
+    % starting camera calibration toolbox
     cameraCalibrator
-    %prompt = 'Mi annak a képfájlnak a neve, amin a lézerrel párhuzamos minta van?';
-    %paralellImage = input(prompt,'s');
-    prompt = 'Mi annak képnek a sorszáma, amin a lézerrel párhuzamos minta van?';
+    prompt = 'What is the number of the picture, on '+...
+        +'what the laserline is parallel with the chessboard: ';
     paralellImageNumber = input(prompt);
 end
+
 
 %----------------------------------------------------
 %   Inicializálás, ha nincs kamera VAGY lézer VAGY forgóasztal
