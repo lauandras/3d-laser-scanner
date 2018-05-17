@@ -4,11 +4,11 @@
 %   Kamera kalibr�ci�ja
 %----------------------------------------------------
 laserPin = 'D2';
-prompt = 'Melyik porthoz van csatlakoztatva a l�zer vez�rl�je: ';
-laserCom = input(prompt,'s');
-laserDino = arduino(laserCom,'Nano3');
-disp('Laser connected')
-writeDigitalPin(laserDino,laserPin,1);
+%prompt = 'Melyik porthoz van csatlakoztatva a l�zer vez�rl�je: ';
+%laserCom = input(prompt,'s');
+%laserDino = arduino(laserCom,'Nano3');
+%disp('Laser connected')
+%writeDigitalPin(laserDino,laserPin,1);
 if (exist('cameraParams','var')~=1)
     clear cam
     disp('K�sz�tsen 15 k�pet 4 m�sodperces k�zid�vel, majd m�g 3-at �gy, hogy a sakkt�bla minta a l�zerrel p�rhuzamos!')
