@@ -223,7 +223,7 @@ A \textit{Calibration} fülön az \textit{Optimization Options}-re, a \textit{Ca
 \centering
 \begin{lstlisting}[
 style = Matlab-editor,
-basicstyle=\small
+basicstyle=\tiny
 ]
 %----------------------------------------------------
 %   Camera calibration
@@ -261,24 +261,58 @@ end
 \caption{Kamera kalibrációs rész kódja a scan\_object.m szkriptből}
 \end{figure}
 
-		
-hellobello
+%=================================================
+\subsection{Perifériák inicializálása}
+Ellenőrizzük, hogy az adott perifériák léteznek-e a 'workspace'-n, ha bármelyik hiányzik, akkor kitöröljük mindet, majd újrainicializálunk az \textit{init()} függvény segítségével.
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+%----------------------------------------------------
+%   Initialization
+%----------------------------------------------------
 
+% if there are no camera or laser or turntable variables
+% on the workspace
+
+% exist name -- returns 1 if 'name' is a variable in the workspace and 0 if
+% not
+if ((exist('a','var')&&exist('laserDino','var')&&exist('cam','var'))~=1)
+clear a
+clear cam
+clear laserDino
+[a,laserDino,cam]=init(laserCom);
+end
+\end{lstlisting}
+\caption{Az eszközök inicializáló kódja a scan\_object.m szkriptből}
+\end{figure}
+	
 \begin{figure}
-	\lstinputlisting[
-	style      = Matlab-editor
-	]{../matlab_files/init.m}
+\centering
+\lstinputlisting[
+style = Matlab-editor,
+basicstyle=\tiny
+]{../matlab_files/init.m}
+\caption{Az init() függvény}
 \end{figure}
 
-
-\subsection{Perifériák inicializálása}
+%=================================================
 \subsection{Képek vágása}
+%=================================================
 \subsection{Transzformáció meghatározása}
+%=================================================
 \subsection{Szükséges változók deklarálása}
+%=================================================
 \subsection{Szkennelés folyamata}
+%=================================================
 \subsubsection{Lézerfény detektálása}
+%=================================================
 \subsubsection{A forgóasztal léptetése}
+%=================================================
 \subsubsection{Képek transzformációja}
+%=================================================
 \subsubsection{Pontfelhő generálása}
 %=================================================
 \section{Eredmények, a módszer korlátai}
