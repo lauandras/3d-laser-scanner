@@ -300,6 +300,35 @@ basicstyle=\tiny
 
 %=================================================
 \subsection{Képek vágása}
+A szkennelt test felületén lévő piros lézercsík felismerésének, illetve az összes számolás gyorsításához a felhasználó kijelölheti a tárgyat befoglaló területét, majd egy jobb klikkes menüből levághatja a felesleges részeket.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=8cm]{images/imgCrop}
+	\caption{Képek crop-polása}
+\end{figure}\\[10pt]
+\begin{figure}[h!]
+	\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+%--------------------------------------------------------
+%   Cropping the valuable areas of the images
+%--------------------------------------------------------
+
+disp('Place the object on the turntable and then click the figure!')
+% show figure window
+figure;
+% waiting for the click
+waitforbuttonpress;
+disp('Select the object on the image, then right click and "Crop Image"!')
+% take a snapshot and display it on the figure
+img=snapshot(cam);
+[imgCropped,rect]=imcrop(img);
+\end{lstlisting}
+	\caption{A kép vágó kód a scan\_object.m szkriptből}
+\end{figure}
+
 %=================================================
 \subsection{Transzformáció meghatározása}
 %=================================================

@@ -52,12 +52,16 @@ if ((exist('a','var')&&exist('laserDino','var')&&exist('cam','var'))~=1)
 end
 
 %--------------------------------------------------------
-%   Kép érdemi részének kijelölése
+%   Cropping the valuable areas of the images
 %--------------------------------------------------------
-disp('Tegye a tárgyat a forgóasztalra, ha megvan kattintson a figurre!')
+
+disp('Place the object on the turntable and then click the figure!')
+% show figure window
 figure;
+% waiting for the click
 waitforbuttonpress;
-disp('Jelölje ki a képen a tárgyat, majd jobb egérgomb és "Crop Image"!')
+disp('Select the object on the image, then right click and "Crop Image"!')
+% take a snapshot and display it on the figure
 img=snapshot(cam);
 [imgCropped,rect]=imcrop(img);
 
