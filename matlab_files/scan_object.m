@@ -5,9 +5,12 @@
 %----------------------------------------------------
 %   Camera calibration
 %----------------------------------------------------
+
+% laserPin - the pin, on which the linelaser is soldered to
 laserPin = 'D2';
-prompt = 'On which Port is the laser controlling Arduino is connected: ';
+prompt = 'On which Port the laser controlling Arduino is connected: ';
 laserCom = input(prompt,'s');
+
 % connecting to the laser controlling Arduino on Port 'laserCom'
 laserDino = arduino(laserCom,'Nano3');
 disp('Laser connected')
