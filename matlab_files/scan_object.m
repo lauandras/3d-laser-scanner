@@ -1,52 +1,56 @@
 
 % run this scritp to make images
 %----------------------------------------------------
-%   Kamera kalibrációja
+%   Kamera kalibrï¿½ciï¿½ja
 %----------------------------------------------------
 laserPin = 'D2';
-prompt = 'Melyik porthoz van csatlakoztatva a lézer vezérlõje: ';
+prompt = 'Melyik porthoz van csatlakoztatva a lï¿½zer vezï¿½rlï¿½je: ';
 laserCom = input(prompt,'s');
 laserDino = arduino(laserCom,'Nano3');
 disp('Laser connected')
 writeDigitalPin(laserDino,laserPin,1);
 if (exist('cameraParams','var')~=1)
     clear cam
-    disp('Készítsen 15 képet 4 másodperces közidõvel, majd még 3-at úgy, hogy a sakktábla minta a lézerrel párhuzamos!')
+    disp('Kï¿½szï¿½tsen 15 kï¿½pet 4 mï¿½sodperces kï¿½zidï¿½vel, majd mï¿½g 3-at ï¿½gy, hogy a sakktï¿½bla minta a lï¿½zerrel pï¿½rhuzamos!')
     cameraCalibrator
-    %prompt = 'Mi annak a képfájlnak a neve, amin a lézerrel párhuzamos minta van?';
+    %prompt = 'Mi annak a kï¿½pfï¿½jlnak a neve, amin a lï¿½zerrel pï¿½rhuzamos minta van?';
     %paralellImage = input(prompt,'s');
-    prompt = 'Mi annak képnek a sorszáma, amin a lézerrel párhuzamos minta van?';
+    prompt = 'Mi annak kï¿½pnek a sorszï¿½ma, amin a lï¿½zerrel pï¿½rhuzamos minta van?';
     paralellImageNumber = input(prompt);
 end
 
 %----------------------------------------------------
-%   Inicializálás, ha nincs kamera VAGY lézer VAGY forgóasztal
+%   Inicializï¿½lï¿½s, ha nincs kamera VAGY lï¿½zer VAGY forgï¿½asztal
 %----------------------------------------------------
-%exist() 1-et ad vissza, ha a változó létezik a workspace-en, 0-át, ha nem
+%exist() 1-et ad vissza, ha a vï¿½ltozï¿½ lï¿½tezik a workspace-en, 0-ï¿½t, ha nem
 if ((exist('a','var')&&exist('laserDino','var')&&exist('cam','var'))~=1)
     clear a
     clear cam
     clear laserDino
-    [a,laserDino,cam]=init(laserCom);
+    prompt = 'Melyik porthoz van csatlakoztatva a lezer vezerloje: ';
+    laserCom = input(prompt,'s');
+    prompt = 'Melyik porthoz van csatlakoztatva a turntable vezerloje: ';
+    turnTableCom = input(prompt,'s');
+    [a,laserDino,cam]=init(laserCom,turnTableCom);
 end
 
 %--------------------------------------------------------
-%   Kép érdemi részének kijelölése
+%   Kï¿½p ï¿½rdemi rï¿½szï¿½nek kijelï¿½lï¿½se
 %--------------------------------------------------------
-disp('Tegye a tárgyat a forgóasztalra, ha megvan kattintson a figurre!')
+disp('Tegye a tï¿½rgyat a forgï¿½asztalra, ha megvan kattintson a figurre!')
 figure;
 waitforbuttonpress;
-disp('Jelölje ki a képen a tárgyat, majd jobb egérgomb és "Crop Image"!')
+disp('Jelï¿½lje ki a kï¿½pen a tï¿½rgyat, majd jobb egï¿½rgomb ï¿½s "Crop Image"!')
 img=snapshot(cam);
 [imgCropped,rect]=imcrop(img);
 
 %--------------------------------------------------------
-%   Transzformáció meghatározása
+%   Transzformï¿½ciï¿½ meghatï¿½rozï¿½sa
 %--------------------------------------------------------
 [tfHeight,tfWidth,tform,xdata,ydata]=imageTform(imgCropped,rect,paralellImageNumber,cameraParams);
 
 %--------------------------------------------------------
-%   Szúkséges változók deklarációja
+%   Szï¿½ksï¿½ges vï¿½ltozï¿½k deklarï¿½ciï¿½ja
 %--------------------------------------------------------
 rotations=400;
 imgSize = size(img);
@@ -61,10 +65,10 @@ kepek=zeros([rotations croppedHeight croppedWidth]);
 clk='D6';
 
 %--------------------------------------------------------
-%   Szkennelés
+%   Szkennelï¿½s
 %--------------------------------------------------------
 figure;
-f=waitbar(0,'Inicializálás','Name','Making images');
+f=waitbar(0,'Inicializï¿½lï¿½s','Name','Making images');
 for idr=1:rotations
     laserMask=laser_line_detection(rect,laserDino,laserPin,cam);
     kepek(idr,:,:)=laserMask;
@@ -76,7 +80,7 @@ end
 close(f)
 
 %--------------------------------------------------------
-%   Pontfelhõ generálása
+%   Pontfelhï¿½ generï¿½lï¿½sa
 %--------------------------------------------------------
 xyz=pointCloud(rotations,polarPointSet_mm,tfHeight);
 pcshow(xyz)

@@ -1,10 +1,10 @@
-function [a,laserDino,cam]=init(laserCom)
+function [a,laserDino,cam]=init(laserCom,turnTableCom)
 % function to initialize variables
 
 %------------------------------------------
 % connection to the table rotating arduino
 %------------------------------------------
-a = arduino('btspp://98D33190154F','Nano3');
+a = arduino(turnTableCom,'Nano3');
 %a = arduino('COM9','Nano3');
 disp('Turntable connected')
 clk='D6';
