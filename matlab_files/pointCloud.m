@@ -5,7 +5,7 @@ for i=1:rotations
     for j=1:tfHeight
         xyz((i-1)*tfHeight+j,1)=polarPointSet_mm(i,j,1)*cos(angle);
         xyz((i-1)*tfHeight+j,2)=polarPointSet_mm(i,j,1)*sin(angle);
-        if (-polarPointSet_mm(i,j,2)<-8)
+        if (-polarPointSet_mm(i,j,2)<-20)
             %if (0) 
             %xyz((i-1)*tfHeight+j,3)=0;
         else
