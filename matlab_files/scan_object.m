@@ -36,9 +36,14 @@ end
 
 
 %----------------------------------------------------
-%   Inicializálás, ha nincs kamera VAGY lézer VAGY forgóasztal
+%   Initialization
 %----------------------------------------------------
-%exist() 1-et ad vissza, ha a változó létezik a workspace-en, 0-át, ha nem
+
+% if there are no camera or laser or turntable variables
+% on the workspace
+
+% exist name -- returns 1 if 'name' is a variable in the workspace and 0 if
+% not
 if ((exist('a','var')&&exist('laserDino','var')&&exist('cam','var'))~=1)
     clear a
     clear cam
