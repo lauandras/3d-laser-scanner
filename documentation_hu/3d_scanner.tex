@@ -451,11 +451,30 @@ A szkennelés egy iterációs lépéssorozat - amit annyiszor hajtunk végre, ah
 \end{figure}
 
 %=================================================
-\subsubsection{Kép készítése és lézerfény detektálása}
-
+\subsubsection{Képek készítése és lézerfény detektálása}
+A lézerfény felismerés úgy történik, hogy készítünk két képet, egyet lézerfénnyel, egyet anélkül, majd levágjuk a felesleges részeket és szürkeárnyalatossá alakítjuk őket. Ezután kivonjuk a kettőt egymásból, és a létrejövő képen egy gaus-os elmosást alkalmazunk. Az utóbbi ahoz szükséges, hogy a képünkön létrejövő kontrasztos vonalakat kicsit összemossuk. A szűrt képen a \textit{DIY: How to Make a Low Cost 3D Scanner} projektben található algorithmus (\textit{detectLaserLineOnImg()} függvény) kis módosításával és hangolásával meghatározzuk a lézervonal pozícióját. Az egész folyamatot a \textit{laser\_line\_detection()} nevű függvény kontrollálja.
+\begin{figure}[h!]
+	\centering
+	\lstinputlisting[
+	style = Matlab-editor,
+	basicstyle=\tiny
+	]{../matlab_files/laser_line_detection.m}
+	\caption{A laser\_line\_detection() függvény}
+\end{figure}
 
 %=================================================
 \subsubsection{A forgóasztal léptetése}
+
+
+\begin{figure}
+\centering
+\lstinputlisting[
+style = Matlab-editor,
+basicstyle=\tiny
+]{../matlab_files/rotateTable.m}
+\caption{A rotateTable() függvény}
+\end{figure}
+
 %=================================================
 \subsubsection{Képek transzformációja}
 %=================================================

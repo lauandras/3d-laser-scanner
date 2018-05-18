@@ -1,8 +1,8 @@
 function laserMask = detectLaserLineOnImg(filteredGrayImg)
-%DETECTLASERLINE Summary of this function goes here
-%   Detailed explanation goes here
+% detectLaserLineOnImg() - detects the laser line on the filtered
+% grayscaled imgage
 
-    %laserMask - modified but copied from http://www.instructables.com/id/3D-Laser-Scanning-DIY/
+    % laserMask - modified but copied from http://www.instructables.com/id/3D-Laser-Scanning-DIY/
     imgSize = size(filteredGrayImg);
     I_new =zeros(imgSize);
 

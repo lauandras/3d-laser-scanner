@@ -52,7 +52,7 @@ filtered_gray = imgaussfilt(grayOn-grayOff,0.8);
 %     pause(2);
 % end
 
-% BW1 = edge(filtered_gray,'Sobel','vertical');
+%BW1 = edge(filtered_gray,'Sobel','vertical');
 %BW2 = edge(filtered_gray,'Prewitt','vertical'); %this is the best in darkness
 % 
 % imshowpair(BW1,BW2,'montage');
