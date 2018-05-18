@@ -66,7 +66,7 @@ img=snapshot(cam);
 [imgCropped,rect]=imcrop(img);
 
 %--------------------------------------------------------
-%   Transzformáció meghatározása
+%   Determining the image transformation
 %--------------------------------------------------------
 [tfHeight,tfWidth,tform,xdata,ydata]=imageTform(imgCropped,rect,paralellImageNumber,cameraParams);
 

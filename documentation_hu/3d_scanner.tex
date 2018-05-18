@@ -211,7 +211,7 @@ A képek elkészülése utáni felugró ablakban meg kell adni a sakktáblánk e
 	\includegraphics[height=3cm]{images/cameraCalibrator_checkboardSize}
 	\caption{Sakktábla rácsméretének a megadása}
 \end{figure}\\[10pt]
-A \textit{Calibration} fülön az \textit{Optimization Options}-re, a \textit{Calibrate}, majd az \textit{Export Camera Parameters}-re kattintva ebben a sorrendben, már csak egy lépés marad a kalibrációs folyamatból: Matlab \textit{Command Window}-jában megadni annak a képnek a számát, amelyiken a sakktáblánk párhuzamos volt a lézernyalábbal.
+A \textit{Calibration} fülön az \textit{Optimization Options}-re, a \textit{Calibrate}, majd az \textit{Export Camera Parameters}-re kattintva ebben a sorrendben, már csak egy lépés marad a kalibrációs folyamatból: Matlab \textit{Command Window}-jában megadni annak a képnek a számát, amelyiken a sakktáblánk párhuzamos volt a lézernyalábbal. A kalibráció során a \textit{Matlab} algoritmusa meghatározza a mintán a négyzetek sarokpontjait, amikhez később, a 5.4-es pontban szükségünk lesz a képtranszformáció meghatározásában.
 
 \begin{figure}[h!]
 	\centering
@@ -331,6 +331,31 @@ img=snapshot(cam);
 
 %=================================================
 \subsection{Transzformáció meghatározása}
+Azért van szükségünk erre a módszerre, mivel a kameránk elég éles szögben van rögzítve a vonallézerrel, és ez a lézerre párhuzamos sakktáblát perspektívikusan jeleníti meg. Ez nekünk nem jó, mert nagyon sok bonyolult geometriai számítást igénylő programra lenne szükségünk, amivel meghatározható lenne a forgástengely és az adott helyen lévő pont távolsága. A perspektívikus képünket tehát úgy szeretnénk módosítani, hogy a négyszögek négyzetekké alakuljanak, ráadásul akkor négyzetekké, mint a valóságos sakktáblamintánkon.\\[10pt]
+Amennyiben ismert 4-4 különböző pont a síkon és a transzformáció jellege (esetünkben: \textit{projektív} - a pontokat összekötő egyenesek egyenesek maradnak), akkor a két ponthalmaz között egyértelműen meghatározható a leképzési transzformáció. Ezt valósítja meg az általunk implementált \textit{imageTform()} nevű függvény.\\[10pt]
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+%--------------------------------------------------------
+%   Determining the image transformation
+%--------------------------------------------------------
+[tfHeight,tfWidth,tform,xdata,ydata]=imageTform(imgCropped,rect,paralellImageNumber,cameraParams);
+\end{lstlisting}
+\caption{A transzformáció meghatározása a scan\_object.m szkriptből}
+\end{figure}
+A függvény a levágott kép, a vágási határok, a vonallézerre párhuzamos kép ismeretében, és ezen a képen a sakktáblán felismert pontok helyéből meghatározza a leképzési transzformációt, és a leendő áttranszformált képek méreteit.
+\begin{figure}
+\centering
+\lstinputlisting[
+style = Matlab-editor,
+basicstyle=\tiny
+]{../matlab_files/imageTform.m}
+\caption{Az imageTform() függvény}
+\end{figure}
+
 %=================================================
 \subsection{Szükséges változók deklarálása}
 %=================================================
