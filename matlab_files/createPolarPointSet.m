@@ -5,8 +5,6 @@ imgWidth  = imgSize(2);
 
 % the first coordinate is the radius in [mm]
 % the second coordinate is the height in [mm]
-
-%polarPointSet2_mm = zeros([rotations imgHeight 2]);    !!!!!!
 for iy = 1:imgHeight
     pointCounter = 0;
     pointLocation = 0;
@@ -16,10 +14,11 @@ for iy = 1:imgHeight
             pointLocation = pointLocation + ix;
         end    
     end
+    % if there are multiple points in one line then calculate average
     if pointCounter ~= 0
         pointLocation = pointLocation / pointCounter;
         positionVector = [pointLocation,iy];
-        rotation_height = [positionVector(1)+xdata(1) positionVector(2)-ydata(2)];
+        rotation_height = [positionVector(1)+xdata(1) positionVector(2)+ydata(2)];
         polarPointSet_mm(idr,iy,:) = rotation_height;
     end       
 end
