@@ -464,8 +464,7 @@ A lézerfény felismerés úgy történik, hogy készítünk két képet, egyet 
 
 %=================================================
 \subsubsection{A forgóasztal léptetése}
-
-
+A tavalyi csapattól örökült H-hidas stepper motor vezérlő áramkör clock lábának pulzálásával lehet az asztalunkat léptetni. A \textit{rotateTable()} függvény amit megalkottunk képes arra, hogy egy hívásra többet is léptesse az asztalt, ez azért praktikus, mert így lehetséges egy gyorsított, habár pontatlanabb szkennelést végezni az objektumon. 
 \begin{figure}
 \centering
 \lstinputlisting[
@@ -477,8 +476,20 @@ basicstyle=\tiny
 
 %=================================================
 \subsubsection{Képek transzformációja}
+A transzformálást az \textit{imtransform()}, Matlab-ba beépített függvény valósítja meg nekünk, a már korábban meghatározott \textit{tform} transzformációs objektum segítségével.
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+% transforming the img
+tfLaserMask=imtransform(laserMask,tform);
+\end{lstlisting}
+\caption{Szkennlés kódrészlete a scan\_object.m szkriptből}
+\end{figure}
 %=================================================
-\subsubsection{Pontfelhő generálása}
+\subsubsection{Polárkoordinátás Pontfelhő generálása}
 %=================================================
 \section{Eredmények, a módszer korlátai}
 %=================================================

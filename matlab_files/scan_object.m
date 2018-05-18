@@ -112,7 +112,7 @@ for idr=1:rotations
     laserMask=laser_line_detection(rect,laserDino,laserPin,cam);
     kepek(idr,:,:)=laserMask;
     % rotating the table
-    rotateTable(a,clk,400/rotations);
+    rotateTable(a,clk,1);
     % transforming the img
     tfLaserMask=imtransform(laserMask,tform);
     % generating the polar pointset
