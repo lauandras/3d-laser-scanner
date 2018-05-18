@@ -21,6 +21,8 @@ writeDigitalPin(a,halfStep,1);
 %--------------------------------------------
 % connection to the laser controlling arduino
 %--------------------------------------------
+
+% laserPin - the pin, on which the linelaser is soldered to
 laserPin = 'D2';
 laserDino = arduino(laserCom,'Nano3');
 disp('Laser connected')

@@ -10,6 +10,38 @@ pdfborder={0 0 0},
 \usepackage{fancyhdr}
 \usepackage[left=2cm,right=2cm,top=3.5cm,bottom=3cm,headsep=50pt]{geometry}
 
+%=================================================
+% code snippset settings
+%=================================================
+\usepackage{listings}
+\usepackage{color}
+
+\usepackage[framed,numbered]{matlab-prettifier}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\lstset{language=Matlab,%
+	%basicstyle=\color{red},
+	breaklines=true,%
+	morekeywords={matlab2tikz},
+	keywordstyle=\color{blue},%
+	morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+	identifierstyle=\color{black},%
+	stringstyle=\color{mylilas},
+	commentstyle=\color{mygreen},%
+	showstringspaces=false,%without this there will be a symbol in the places where there is a space
+	numbers=left,%
+	numberstyle={\tiny \color{black}},% size of the numbers
+	numbersep=9pt, % this defines how far the numbers are from the text
+	emph=[1]{for,end,break},emphstyle=[1]\color{red}, %some words to emphasise
+	%emph=[2]{word1,word2}, emphstyle=[2]{style},    
+}
+
+
 \begin{document}
 %=================================================
 \thispagestyle{empty}
@@ -146,16 +178,306 @@ A másik rész a kamera állvány, rajta a lézerrel és webkamerával. Utóbbi 
 \end{figure}
 %=================================================
 \section{Programkód}
-Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát.
+%=================================================
+Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát. A továbbiakban ezeket fogjuk részletezni elmagyarázni.
+%=================================================
 \subsection{Kamera kalibráció}
+A kamera kalibrációt elsőnek a lézert vezérlő Arduino csatlakoztatásával kezdjük, majd bekapcsoljuk a vonallézert. Ez azért szükséges, hogy a forgóasztal forgástengelyét pontosan a lézer vonalába lehessen helyezni.\\[10pt]
+Következő lépésben ellenőrizzük, hogy nincs-e már kalibrálva. Ha igen, akkor ugrunk a következő szekcióra, ha nem akkor pedig megkezdjük a kalibrációs lépéseket:
+\begin{enumerate}
+	\item Camera Calibrator megnyílása
+	\item Képek hozzáadása
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[height=5.5cm]{images/cameraCalibrator_AddImages_LI}
+		\caption{Camera Calibrator-ban a képek hozzáadása}
+	\end{figure}
+	\item A Camera fülön a kameránk kiválasztása
+	\item Képek mentési helyének kiválasztása
+	\item A képkészítések idejének beállítása
+	\item A készítendő képek számának megadása
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[height=4cm]{images/cameraCalibrator_CameraSettings}
+		\caption{Képkészítési beállítások megadása}
+	\end{figure}
+	\item Ha mindent jól beállítottunk, a Capture gombra kattintás 
+\end{enumerate}
+A sakktáblát célszerű különböző távolságokra, különböző szögekben tartani a kamerához képest, mert akkor pontosabban tud dolgozni az algoritmus. Ajánlott legalább 10-15 kép elkészítése, mielőtt eljutnánk a kalibrációnk kritikus, legnagyobb precizitást igénylő pontjához, a forgástengely beállításához.\\[10pt]
+Most úgy kell még 3 képet készíteni, hogy a sakktábla egyik határolóvonala a forgástengellyel egybe essen, merőleges legyen a forgóasztalra és párhuzamos legyen a vonallézernyalábbal. Attól függően, hogy ezt a lépést milyen pontosan végezzük el, befolyásoljuk a beszkennelt 3d-modellünk pontosságát.\\[10pt]
+A képek elkészülése utáni felugró ablakban meg kell adni a sakktáblánk egy elemének a méreteit.\\[10pt]
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=3cm]{images/cameraCalibrator_checkboardSize}
+	\caption{Sakktábla rácsméretének a megadása}
+\end{figure}\\[10pt]
+A \textit{Calibration} fülön az \textit{Optimization Options}-re, a \textit{Calibrate}, majd az \textit{Export Camera Parameters}-re kattintva ebben a sorrendben, már csak egy lépés marad a kalibrációs folyamatból: Matlab \textit{Command Window}-jában megadni annak a képnek a számát, amelyiken a sakktáblánk párhuzamos volt a lézernyalábbal. A kalibráció során a \textit{Matlab} algoritmusa meghatározza a mintán a négyzetek sarokpontjait, amikhez később, a 5.4-es pontban szükségünk lesz a képtranszformáció meghatározásában.
+
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=8cm]{images/cameraCalibrator_exportCameraParams}
+	\caption{A kalibráció utólsó lépései}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+%----------------------------------------------------
+%   Camera calibration
+%----------------------------------------------------
+
+% laserPin - the pin, on which the linelaser is soldered to
+laserPin = 'D2';
+prompt = 'On which Port is the laser controlling Arduino is connected: ';
+laserCom = input(prompt,'s');
+
+% connecting to the laser controlling Arduino on Port 'laserCom'
+laserDino = arduino(laserCom,'Nano3');
+disp('Laser connected')
+
+% switch on the laser, that you can place the table so, that the laserline
+% intersect the rotation axis
+writeDigitalPin(laserDino,laserPin,1);
+
+% if 'cameraParams' variable exists, then the calibration process is already done 
+if (exist('cameraParams','var')~=1)
+% if not then clear the variables for webCam - 'cam', the camera
+% calibration toolbox will use it
+clear cam
+
+disp('Make minimum 15 pictures, then more 3 so,'+... 
++'that the chessboard pattern is parallel with the laserline!')
+
+% starting camera calibration toolbox
+cameraCalibrator
+prompt = 'What is the number of the picture, on '+...
++'what the laserline is parallel with the chessboard: ';
+paralellImageNumber = input(prompt);
+end
+\end{lstlisting}
+\caption{Kamera kalibrációs rész kódja a scan\_object.m szkriptből}
+\end{figure}
+
+%=================================================
 \subsection{Perifériák inicializálása}
+Ellenőrizzük, hogy az adott perifériák léteznek-e a 'workspace'-n, ha bármelyik hiányzik, akkor kitöröljük mindet, majd újrainicializálunk az \textit{init()} függvény segítségével.
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+%----------------------------------------------------
+%   Initialization
+%----------------------------------------------------
+
+% if there are no camera or laser or turntable variables
+% on the workspace
+
+% exist name -- returns 1 if 'name' is a variable in the workspace and 0 if
+% not
+if ((exist('a','var')&&exist('laserDino','var')&&exist('cam','var'))~=1)
+clear a
+clear cam
+clear laserDino
+[a,laserDino,cam]=init(laserCom);
+end
+\end{lstlisting}
+\caption{Az eszközök inicializáló kódja a scan\_object.m szkriptből}
+\end{figure}
+	
+\begin{figure}
+\centering
+\lstinputlisting[
+style = Matlab-editor,
+basicstyle=\tiny
+]{../matlab_files/init.m}
+\caption{Az init() függvény}
+\end{figure}
+
+%=================================================
 \subsection{Képek vágása}
+A szkennelt test felületén lévő piros lézercsík felismerésének, illetve az összes számolás gyorsításához a felhasználó kijelölheti a tárgyat befoglaló területét, majd egy jobb klikkes menüből levághatja a felesleges részeket.
+\begin{figure}[h!]
+	\centering
+	\includegraphics[height=8cm]{images/imgCrop}
+	\caption{Képek crop-polása}
+\end{figure}\\[10pt]
+\begin{figure}[h!]
+	\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+%--------------------------------------------------------
+%   Cropping the valuable areas of the images
+%--------------------------------------------------------
+
+disp('Place the object on the turntable and then click the figure!')
+% show figure window
+figure;
+% waiting for the click
+waitforbuttonpress;
+disp('Select the object on the image, then right click and "Crop Image"!')
+% take a snapshot and display it on the figure
+img=snapshot(cam);
+[imgCropped,rect]=imcrop(img);
+\end{lstlisting}
+	\caption{A kép vágó kód a scan\_object.m szkriptből}
+\end{figure}
+
+%=================================================
 \subsection{Transzformáció meghatározása}
+Azért van szükségünk erre a módszerre, mivel a kameránk elég éles szögben van rögzítve a vonallézerrel, és ez a lézerre párhuzamos sakktáblát perspektívikusan jeleníti meg. Ez nekünk nem jó, mert nagyon sok bonyolult geometriai számítást igénylő programra lenne szükségünk, amivel meghatározható lenne a forgástengely és az adott helyen lévő pont távolsága. A perspektívikus képünket tehát úgy szeretnénk módosítani, hogy a négyszögek négyzetekké alakuljanak, ráadásul akkor négyzetekké, mint a valóságos sakktáblamintánkon.\\[10pt]
+Amennyiben ismert 4-4 különböző pont a síkon és a transzformáció jellege (esetünkben: \textit{projektív} - a pontokat összekötő egyenesek egyenesek maradnak), akkor a két ponthalmaz között egyértelműen meghatározható a leképzési transzformáció. Ezt valósítja meg az általunk implementált \textit{imageTform()} nevű függvény.\\[10pt]
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+%--------------------------------------------------------
+%   Determining the image transformation
+%--------------------------------------------------------
+[tfHeight,tfWidth,tform,xdata,ydata]=imageTform(imgCropped,rect,paralellImageNumber,cameraParams);
+\end{lstlisting}
+\caption{A transzformáció meghatározása a scan\_object.m szkriptből}
+\end{figure}
+A függvény a levágott kép, a vágási határok, a vonallézerre párhuzamos kép ismeretében, és ezen a képen a sakktáblán felismert pontok helyéből meghatározza a leképzési transzformációt, és a leendő áttranszformált képek méreteit.
+\begin{figure}
+\centering
+\lstinputlisting[
+style = Matlab-editor,
+basicstyle=\tiny
+]{../matlab_files/imageTform.m}
+\caption{Az imageTform() függvény}
+\end{figure}
+
+%=================================================
 \subsection{Szükséges változók deklarálása}
+A Matlab különböző dimenziójú mátrixokban tárolja az adatokat/változók értékeit és azért, hogy az értékeinket el tudjuk megfelelően tárolni, létre kell hozni és feltölteni valamilyen kezdeti értékekkel ezeket. Később a változók egyes elemeit indexeléssel meg tudjuk változtatni, illetve ki tudjuk nyerni belőlük az adatokat. Ilyen adatszettek például:
+\begin{itemize}
+	\item A polárkoordinátás pontfelhőnk
+	\item A képeket tároló mátrixok
+\end{itemize}
+Ebben a programkódrészletben definiáljuk továbbá a program futása során nem változó de lényeges konstansokat:
+\begin{itemize}
+	\item A forgatások számát, ami szükséges az asztal teljes körülfordulásához
+	\item A forgósztalt vezérlő Arduino azon lábát, amelyikkel az órajelet adjuk neki
+	\item A készített és levágott képek méreteit
+\end{itemize}
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}[
+	style = Matlab-editor,
+	basicstyle=\tiny
+	]
+	%--------------------------------------------------------
+	%   Initializing further variables
+	%--------------------------------------------------------
+	
+	% the number of rotatinos with the turntable makes one total rotation 
+	% (360 degree)
+	rotations=400;
+	
+	% getting the height and width of the cropped images
+	imgSize = size(img);
+	imgHeight = imgSize(1);
+	imgWidth  = imgSize(2);
+	croppedHeight=int16(rect(4));
+	croppedWidth=int16(rect(3));
+	
+	% initializing the polar point set with maximum pointnumber
+	%  - we have 400 pictures from a whole rotation and 
+	%  - each picture have an tfHeight on which we will iterate through
+	%  - each point have a radius and height coordinate
+	polarPointSet_mm = zeros([rotations tfHeight 2]);
+	
+	% initializing the arrays, what are containing all off the images
+	filteredImages=zeros(rotations,croppedHeight,croppedWidth);
+	transformedImages=zeros(rotations,tfHeight,tfWidth);
+	kepek=zeros([rotations croppedHeight croppedWidth]);
+	
+	% set the clock signal pin on which we are communicating with the turntable
+	clk='D6';
+	\end{lstlisting}
+	\caption{Változók deklarálása, inicializálása kódrészlet a scan\_object.m szkriptből}
+\end{figure}
+
+
+%=================================================
 \subsection{Szkennelés folyamata}
-\subsubsection{Lézerfény detektálása}
+A szkennelés egy iterációs lépéssorozat - amit annyiszor hajtunk végre, ahány egységnyi forgatás szükséges a forgóasztal körbefordulásához - , ami a következő alfolyamatokra bontható le:
+\begin{enumerate}
+	\item Képkészítés és lézerfény felismerés
+	\item Forgóasztal léptetés
+	\item Képtranszformáció
+	\item Pontfelhő generálás
+	\item Státuszbár frissítése
+\end{enumerate} 
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}[
+	style = Matlab-editor,
+	basicstyle=\tiny
+	]
+	%--------------------------------------------------------
+	%   Scanning
+	%--------------------------------------------------------
+	
+	% create window
+	figure;
+	% create status bar
+	f=waitbar(0,'Initialization','Name','Making images');
+	for idr=1:rotations
+	% capturing an image and detect the laserline on it
+	laserMask=laser_line_detection(rect,laserDino,laserPin,cam);
+	kepek(idr,:,:)=laserMask;
+	% rotating the table
+	rotateTable(a,clk,400/rotations);
+	% transforming the img
+	tfLaserMask=imtransform(laserMask,tform);
+	% generating the polar pointset
+	polarPointSet_mm=createPolarPointSet(tfLaserMask,polarPointSet_mm,idr,xdata,ydata);
+	% refreshing the status bar
+	waitbar(idr/rotations,f,sprintf('%d/%d',idr,rotations));
+	end
+	close(f)
+	\end{lstlisting}
+	\caption{Szkennlés kódrészlete a scan\_object.m szkriptből}
+\end{figure}
+
+%=================================================
+\subsubsection{Képek készítése és lézerfény detektálása}
+A lézerfény felismerés úgy történik, hogy készítünk két képet, egyet lézerfénnyel, egyet anélkül, majd levágjuk a felesleges részeket és szürkeárnyalatossá alakítjuk őket. Ezután kivonjuk a kettőt egymásból, és a létrejövő képen egy gaus-os elmosást alkalmazunk. Az utóbbi ahoz szükséges, hogy a képünkön létrejövő kontrasztos vonalakat kicsit összemossuk. A szűrt képen a \textit{DIY: How to Make a Low Cost 3D Scanner} projektben található algorithmus (\textit{detectLaserLineOnImg()} függvény) kis módosításával és hangolásával meghatározzuk a lézervonal pozícióját. Az egész folyamatot a \textit{laser\_line\_detection()} nevű függvény kontrollálja.
+\begin{figure}[h!]
+	\centering
+	\lstinputlisting[
+	style = Matlab-editor,
+	basicstyle=\tiny
+	]{../matlab_files/laser_line_detection.m}
+	\caption{A laser\_line\_detection() függvény}
+\end{figure}
+
+%=================================================
 \subsubsection{A forgóasztal léptetése}
+
+
+\begin{figure}
+\centering
+\lstinputlisting[
+style = Matlab-editor,
+basicstyle=\tiny
+]{../matlab_files/rotateTable.m}
+\caption{A rotateTable() függvény}
+\end{figure}
+
+%=================================================
 \subsubsection{Képek transzformációja}
+%=================================================
 \subsubsection{Pontfelhő generálása}
 %=================================================
 \section{Eredmények, a módszer korlátai}

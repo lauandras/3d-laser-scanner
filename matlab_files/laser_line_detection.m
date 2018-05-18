@@ -14,7 +14,7 @@ function laserMask=laser_line_detection(rect,laserDino,laserPin,cam)
 %preview(cam);
 
 %--------------------------------------------------------
-%   Képkészítés lézerfénnyel és anélkül
+%   Kepkeszites lezerfennyel es anelkul
 %--------------------------------------------------------
 writeDigitalPin(laserDino,laserPin,1);
 pause(1);
@@ -25,13 +25,13 @@ pause(1);
 laserOff = snapshot(cam);
 
 %--------------------------------------------------------
-%   Képek vágása
+%   Kepek vagasa
 %--------------------------------------------------------
 laserOnCropped=imcrop(laserOn,rect);
 laserOffCropped=imcrop(laserOff,rect);
 
 %--------------------------------------------------------
-%   HSV transzformáció, rgb2gray és szûrés
+%   HSV transzformacio, rgb2gray es szures
 %--------------------------------------------------------
 % maskLon = createMaskHSVInDark(laserOnCropped);
 % maskLoff = createMaskHSVInDark(laserOffCropped);
@@ -52,7 +52,7 @@ filtered_gray = imgaussfilt(grayOn-grayOff,0.8);
 %     pause(2);
 % end
 
-% BW1 = edge(filtered_gray,'Sobel','vertical');
+%BW1 = edge(filtered_gray,'Sobel','vertical');
 %BW2 = edge(filtered_gray,'Prewitt','vertical'); %this is the best in darkness
 % 
 % imshowpair(BW1,BW2,'montage');
