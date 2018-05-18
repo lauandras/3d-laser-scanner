@@ -72,7 +72,7 @@ Gépészmérnöki kar}\\[1cm]
 \lhead{3D szkenner}
 \cfoot{\thepage. oldal}
 %=================================================
-\section{Bevezető}
+\section{Bevezető} %vargar
 Az iparban egyre elterjedtebb a 3D szkennerek alkalmazása. Jól használhatóak gyors prototípuskészítésre és `'reverse engineering'' eljárásokhoz. Ezzel jelentős modellezési és mérési idő takarítható meg.\\[10pt]
 Új eszközök tervezésénél és komplex alkatrészek méreteinek gyors meghatározására egyaránt használható. Apróbb mechanikai alkatrészek, turbinalapátok és helységek szkennelése is lehetséges adott felbontással.\\[10pt]
 A gyógyászatban alkalmazzák például test vagy testrész modellezésére, mivel egyes protézisek elkészítése nagy méretpontosságot igényel, és így könnyebben formálhatóak az egyéni igények szerint.\\[10pt]
@@ -87,7 +87,7 @@ Egyetemeken régészek is használhatják leletek tanulmányozására anélkül,
 \end{figure}
 %=================================================
 \newpage
-\section{Feladat leírása}
+\section{Feladat leírása} %vargar
 \subsection{Követelmények}
 A projekt célja egy használható 3D lézerszkenner eljárás kidolgozása és megvalósítása, ami az alábbi követelményeknek megfelel:
 \begin{enumerate}
@@ -102,7 +102,7 @@ A szkennelési módszert egy webkamera, egy vonallézer és egy forgóasztal fel
 %=================================================
 	%"3d laserscanner" kulcsszót beírva a Google-be rengeteg találatot kap az ember. Mi elsőnek a képi és videó találatokat %nézegettük meg, és rögtön megállapítottuk, hogy nagyon menő lesz az általunk készített kis kütyü / szerkezet.\\
 	
-	Alapvetően kétféle lézer szkenner található meg a piacon. Az egyik, ami az adott tárgyat, objektumot végigpásztázza egy lézerfény segítségével és a lézerfény kibocsájtásától, a lézerfény visszaérkezéséig eltelt időből számítja a távolságot. Ez egy elég drága technika, mivel nagyon pontosan kell mérni az időt, mivel a fény terjedési sebessége nagyon nagy, ezért körülbelül $[ns]$ nagyságrendben kell mérni az idő múlását.\\[10pt]
+	Alapvetően kétféle lézer szkenner található meg a piacon. Az egyik, ami az adott tárgyat, objektumot végigpásztázza egy lézerfény segítségével és a lézerfény kibocsájtásától, a lézerfény visszaérkezéséig eltelt időből számítja a távolságot. Ez egy elég drága technika, mert nagyon pontosan kell mérni az időt. Mivel a fény terjedési sebessége nagyon nagy, ezért körülbelül $[ns]$ nagyságrendben kell mérni az idő múlását.\\[10pt]
 	\begin{figure}[h!]
 		\begin{center}
 			\includegraphics[height=5cm]{images/Faro_Building_Scan}
@@ -527,11 +527,50 @@ pcshow(xyz)
 \end{figure}
 
 %=================================================
-\section{Eredmények, a módszer korlátai}
-
+\section{Eredmények, a módszer korlátai} %tard
+A szkennelési pontosságunk - a projekt jelenlegi állása szerint még csak sötétben - 1-2 [mm] közzé esik, ami az általunk használt 640x480-as webkamera felbontássál jónak számít. A mérési pontatlanság mértékét a kalibrációnál fellépő hibák okozzák, amit további alkatrészek készítésével csökkenteni lehetne.\\[10pt]
+Felléphető kalibrációs hibák:
+\begin{itemize}
+	\item Az asztal forgástengelye nem esik teljesen egybe a vonallézerrel
+	\item A vonallézer és az asztal lapja nem merőlegesek egymásra
+	\item A sakktábla
+	\subitem - középső függőleges egyenese nem esett egybe pontosan a forgástengellyel
+	\subitem - nem volt párhuzamos a vonalézér síkjával
+	\subitem - négyzetrácsmérete nem állanó:
+	\subsubitem + a nyomtatási hibák miatt
+	\subsubitem + a kinyomtatott lap elhajlása miatt
+\end{itemize}
+A hibák nagy részét csökkenteni lehetne az asztallap újratervezésével, és rá illeszkedő merőleges sakktáblatartó keret készítésével és a vonallézert tartó állványra plusz vízmértékek felszerelésével.\\[10pt]
+Ha az objektumnak matt felülete van és a szkennelést sötétben végezzük el, akkor 1[mm] pontosság alatti pontfelhőt is képes előállítani a programunk pontos kalibráció esetén.\\[10pt]
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[height=10cm]{images/oblito1}
+		\includegraphics[height=10cm]{images/oblito2}
+	\end{center}
+	\caption{Öblitő palack és 3D-szkennelt pontfelhő}
+\end{figure}
+Amennyiben a tárgyunknak fényes felülete van, akkor a lézernyaláb megvastagodik, meghízik vagy egyátalán nem látszik a készített képen. A kamera lecserélésével, illetve az ilyen esetekben alkalmazott paraméterhangolással lehetne javítani.\\[10pt]
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[height=5cm]{images/rubik1}
+		\includegraphics[height=5cm]{images/rubik2}
+		\\
+		\includegraphics[height=5cm]{images/rubik3}
+		\includegraphics[height=5cm]{images/rubik4}
+	\end{center}
+	\caption{Rubikkocka és 3D-szkennelt pontfelhő domborodása}
+\end{figure}
+\begin{figure}[h!]
+	\begin{center}
+		\includegraphics[height=5.5cm]{images/mouse2}
+		\includegraphics[height=5.5cm]{images/mouse1}
+	\end{center}
+	\caption{Az egér és a nem látszó lézerfény miatt keletkezett folt a pontfelhőn}
+\end{figure}
+A kritikus pontja az eredményeinknek a szkennelési idő, ami jelenleg 20-25 percet vesz igénybe. Az idő redukálására már kidolgozásra került egy módszer, csak implementálása a sok változtás miatt még nem került megvalósításra.\\[10pt]
 
 %=================================================
-\section{Továbbfejlesztési irányok}
+\section{Továbbfejlesztési irányok} % bognarm
 \subsection{Működésbeli}
 Ami az eredeti tervhez képest az idő és eszköz hiány miatt nem valósult meg, egy második kamera beszerzése. Ezt a kamerát a lézer másik oldalára rögzítve, a két kamerát egyszerre működtetve a kitakarásokat lehetne csökkenteni, így bonyolultabb geometriájú tárgyak is szkennelhetőek lennének.
 \\[10pt]
