@@ -347,7 +347,7 @@ basicstyle=\tiny
 \caption{A transzformáció meghatározása a scan\_object.m szkriptből}
 \end{figure}
 A függvény a levágott kép, a vágási határok, a vonallézerre párhuzamos kép ismeretében, és ezen a képen a sakktáblán felismert pontok helyéből meghatározza a leképzési transzformációt, és a leendő áttranszformált képek méreteit.
-\begin{figure}
+\begin{figure}[h!]
 \centering
 \lstinputlisting[
 style = Matlab-editor,
@@ -502,8 +502,34 @@ basicstyle=\tiny
 
 %=================================================
 \subsection{XYZ pontfelhő számítása}
+Utolsó lépésként a polárkoordinátás pontfelhőnket átszámítjuk a \textit{pointCloud()} függvény segítségével és megjelenítjük:
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[
+style = Matlab-editor,
+basicstyle=\tiny
+]
+%--------------------------------------------------------
+%   Calculate the pointcloud to xyz coordinatesystem
+%--------------------------------------------------------
+xyz=pointCloud(rotations,polarPointSet_mm,tfHeight);
+pcshow(xyz)
+\end{lstlisting}
+\caption{A végleges pontfelhő kiszámítása a scan\_object.m szkriptből}
+\end{figure}
+\begin{figure}[h!]
+	\centering
+	\lstinputlisting[
+	style = Matlab-editor,
+	basicstyle=\tiny
+	]{../matlab_files/pointCloud.m}
+	\caption{Az pointCloud() függvény}
+\end{figure}
+
 %=================================================
 \section{Eredmények, a módszer korlátai}
+
+
 %=================================================
 \section{Továbbfejlesztési irányok}
 \subsection{Működésbeli}
