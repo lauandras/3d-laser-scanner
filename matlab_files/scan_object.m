@@ -71,25 +71,42 @@ img=snapshot(cam);
 [tfHeight,tfWidth,tform,xdata,ydata]=imageTform(imgCropped,rect,paralellImageNumber,cameraParams);
 
 %--------------------------------------------------------
-%   Szúkséges változók deklarációja
+%   Initializing further variables
 %--------------------------------------------------------
+
+% the number of rotatinos with the turntable makes one total rotation 
+% (360 degree)
 rotations=400;
+
+% getting the height and width of the cropped images
 imgSize = size(img);
 imgHeight = imgSize(1);
 imgWidth  = imgSize(2);
 croppedHeight=int16(rect(4));
 croppedWidth=int16(rect(3));
+
+% initializing the polar point set with maximum pointnumber
+%  - we have 400 pictures from a whole rotation and 
+%  - each picture have an tfHeight on which we will iterate through
+%  - each point have a radius and height coordinate
 polarPointSet_mm = zeros([rotations tfHeight 2]);
+
+% initializing the arrays, what are containing all off the images
 filteredImages=zeros(rotations,croppedHeight,croppedWidth);
 transformedImages=zeros(rotations,tfHeight,tfWidth);
 kepek=zeros([rotations croppedHeight croppedWidth]);
+
+% set the clock signal pin on which we are communicating with the turntable
 clk='D6';
 
 %--------------------------------------------------------
-%   Szkennelés
+%   Scanning
 %--------------------------------------------------------
+
+% create window
 figure;
-f=waitbar(0,'Inicializálás','Name','Making images');
+% create status bar
+f=waitbar(0,'Initialization','Name','Making images');
 for idr=1:rotations
     laserMask=laser_line_detection(rect,laserDino,laserPin,cam);
     kepek(idr,:,:)=laserMask;
