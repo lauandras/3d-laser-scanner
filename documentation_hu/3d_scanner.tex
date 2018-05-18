@@ -358,6 +358,56 @@ basicstyle=\tiny
 
 %=================================================
 \subsection{Szükséges változók deklarálása}
+A Matlab különböző dimenziójú mátrixokban tárolja az adatokat/változók értékeit és azért, hogy az értékeinket el tudjuk megfelelően tárolni, létre kell hozni és feltölteni valamilyen kezdeti értékekkel ezeket. Később a változók egyes elemeit indexeléssel meg tudjuk változtatni, illetve ki tudjuk nyerni belőlük az adatokat. Ilyen adatszettek például:
+\begin{itemize}
+	\item A polárkoordinátás pontfelhőnk
+	\item A képeket tároló mátrixok
+\end{itemize}
+Ebben a programkódrészletben definiáljuk továbbá a program futása során nem változó de lényeges konstansokat:
+\begin{itemize}
+	\item A forgatások számát, ami szükséges az asztal teljes körülfordulásához
+	\item A forgósztalt vezérlő Arduino azon lábát, amelyikkel az órajelet adjuk neki
+	\item A készített és levágott képek méreteit
+\end{itemize}
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}[
+	style = Matlab-editor,
+	basicstyle=\tiny
+	]
+	%--------------------------------------------------------
+	%   Initializing further variables
+	%--------------------------------------------------------
+	
+	% the number of rotatinos with the turntable makes one total rotation 
+	% (360 degree)
+	rotations=400;
+	
+	% getting the height and width of the cropped images
+	imgSize = size(img);
+	imgHeight = imgSize(1);
+	imgWidth  = imgSize(2);
+	croppedHeight=int16(rect(4));
+	croppedWidth=int16(rect(3));
+	
+	% initializing the polar point set with maximum pointnumber
+	%  - we have 400 pictures from a whole rotation and 
+	%  - each picture have an tfHeight on which we will iterate through
+	%  - each point have a radius and height coordinate
+	polarPointSet_mm = zeros([rotations tfHeight 2]);
+	
+	% initializing the arrays, what are containing all off the images
+	filteredImages=zeros(rotations,croppedHeight,croppedWidth);
+	transformedImages=zeros(rotations,tfHeight,tfWidth);
+	kepek=zeros([rotations croppedHeight croppedWidth]);
+	
+	% set the clock signal pin on which we are communicating with the turntable
+	clk='D6';
+	\end{lstlisting}
+	\caption{Változók deklarálása, inicializálása kódrészlet a scan\_object.m szkriptből}
+\end{figure}
+
+
 %=================================================
 \subsection{Szkennelés folyamata}
 %=================================================
