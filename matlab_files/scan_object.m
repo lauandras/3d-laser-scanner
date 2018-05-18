@@ -108,17 +108,22 @@ figure;
 % create status bar
 f=waitbar(0,'Initialization','Name','Making images');
 for idr=1:rotations
+    % capturing an image and detect the laserline on it
     laserMask=laser_line_detection(rect,laserDino,laserPin,cam);
     kepek(idr,:,:)=laserMask;
+    % rotating the table
     rotateTable(a,clk,400/rotations);
+    % transforming the img
     tfLaserMask=imtransform(laserMask,tform);
+    % generating the polar pointset
     polarPointSet_mm=createPolarPointSet(tfLaserMask,polarPointSet_mm,idr,xdata,ydata);
+    % refreshing the status bar
     waitbar(idr/rotations,f,sprintf('%d/%d',idr,rotations));
 end
 close(f)
 
 %--------------------------------------------------------
-%   Pontfelhõ generálása
+%   Pontfelhõ generálása xyz koordinatarendszerbe
 %--------------------------------------------------------
 xyz=pointCloud(rotations,polarPointSet_mm,tfHeight);
 pcshow(xyz)

@@ -179,7 +179,7 @@ A másik rész a kamera állvány, rajta a lézerrel és webkamerával. Utóbbi 
 %=================================================
 \section{Programkód}
 %=================================================
-	Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát. A továbbiakban ezeket fogjuk részletezni elmagyarázni.
+Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát. A továbbiakban ezeket fogjuk részletezni elmagyarázni.
 %=================================================
 \subsection{Kamera kalibráció}
 A kamera kalibrációt elsőnek a lézert vezérlő Arduino csatlakoztatásával kezdjük, majd bekapcsoljuk a vonallézert. Ez azért szükséges, hogy a forgóasztal forgástengelyét pontosan a lézer vonalába lehessen helyezni.\\[10pt]
@@ -410,8 +410,50 @@ Ebben a programkódrészletben definiáljuk továbbá a program futása során n
 
 %=================================================
 \subsection{Szkennelés folyamata}
+A szkennelés egy iterációs lépéssorozat - amit annyiszor hajtunk végre, ahány egységnyi forgatás szükséges a forgóasztal körbefordulásához - , ami a következő alfolyamatokra bontható le:
+\begin{enumerate}
+	\item Képkészítés és lézerfény felismerés
+	\item Forgóasztal léptetés
+	\item Képtranszformáció
+	\item Pontfelhő generálás
+	\item Státuszbár frissítése
+\end{enumerate} 
+\begin{figure}[h!]
+	\centering
+	\begin{lstlisting}[
+	style = Matlab-editor,
+	basicstyle=\tiny
+	]
+	%--------------------------------------------------------
+	%   Scanning
+	%--------------------------------------------------------
+	
+	% create window
+	figure;
+	% create status bar
+	f=waitbar(0,'Initialization','Name','Making images');
+	for idr=1:rotations
+	% capturing an image and detect the laserline on it
+	laserMask=laser_line_detection(rect,laserDino,laserPin,cam);
+	kepek(idr,:,:)=laserMask;
+	% rotating the table
+	rotateTable(a,clk,400/rotations);
+	% transforming the img
+	tfLaserMask=imtransform(laserMask,tform);
+	% generating the polar pointset
+	polarPointSet_mm=createPolarPointSet(tfLaserMask,polarPointSet_mm,idr,xdata,ydata);
+	% refreshing the status bar
+	waitbar(idr/rotations,f,sprintf('%d/%d',idr,rotations));
+	end
+	close(f)
+	\end{lstlisting}
+	\caption{Szkennlés kódrészlete a scan\_object.m szkriptből}
+\end{figure}
+
 %=================================================
-\subsubsection{Lézerfény detektálása}
+\subsubsection{Kép készítése és lézerfény detektálása}
+
+
 %=================================================
 \subsubsection{A forgóasztal léptetése}
 %=================================================
