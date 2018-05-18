@@ -177,7 +177,7 @@ A másik rész a kamera állvány, rajta a lézerrel és webkamerával. Utóbbi 
 	\caption{Saját készítésű eszközök}
 \end{figure}
 %=================================================
-\section{Programkód}
+\section{Programkód} %tard
 %=================================================
 Az egyes szorosan összetartozó részeket külön függvényben írtuk meg, amiket a főprogram, a scan\_object.m hív meg. A függvények csak a továbbiakban is használt változókat adják vissza, így redukáltuk a Workspace-en található vektorok számát. A továbbiakban ezeket fogjuk részletezni elmagyarázni.
 %=================================================
@@ -490,6 +490,18 @@ tfLaserMask=imtransform(laserMask,tform);
 \end{figure}
 %=================================================
 \subsubsection{Polárkoordinátás Pontfelhő generálása}
+Az képtranszformációnk úgy lett kitalálva, hogy 1[mm] távolságra lévő pontokat 1[px]-re képezzünk le és az y és x tengelyekkel párhuzamosak legyenek a sakktábla négyzetei. A 360$^\circ$-os körbeforduláshoz szükséges lépések számából és a lokális koordinátarendszer origójából (a forgástengely és az asztal síkjának metszéspontja) a transzformált képen könnyedén meghatározhatjuk a pontok helyzetét. 
+\begin{figure}[h!]
+\centering
+\lstinputlisting[
+style = Matlab-editor,
+basicstyle=\tiny
+]{../matlab_files/createPolarPointSet.m}
+\caption{A createPolarPointSet() függvény}
+\end{figure}
+
+%=================================================
+\subsection{XYZ pontfelhő számítása}
 %=================================================
 \section{Eredmények, a módszer korlátai}
 %=================================================
