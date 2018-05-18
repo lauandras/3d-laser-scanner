@@ -123,7 +123,7 @@ end
 close(f)
 
 %--------------------------------------------------------
-%   Pontfelhõ generálása xyz koordinatarendszerbe
+%   Calculate the pointcloud to xyz coordinatesystem
 %--------------------------------------------------------
 xyz=pointCloud(rotations,polarPointSet_mm,tfHeight);
 pcshow(xyz)
